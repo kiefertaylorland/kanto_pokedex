@@ -1,0 +1,7 @@
+# Git Ignore File
+
+## SDLC Documentation
+docs/
+
+## DS_Store
+.DS_Store
