@@ -8,6 +8,18 @@
 
 **Input**: User description: "Build a web application called the Kanto Pokédex: a polished, fast, nostalgic, and accessible way to explore the original 151 Generation I Pokémon."
 
+## Clarifications
+
+### Session 2026-06-06
+
+- Q: Should the Kanto map include a Pokémon/location filter control (PRD FR-MAP-004)? → A: Defer to Phase 2 — map MVP is marker-click → encounter panel interaction only; no search/filter layer on the map screen.
+- Q: Should the Pokémon detail page show the classic Pokédex entry flavor text (from the Red/Blue game version)? → A: Yes — display the English Red/Blue flavor text as a named section on the detail page.
+- Q: Which fallback authentication method should the auth screen offer beyond Google and GitHub? → A: Email magic link — passwordless login via a link sent to the user's email; no third OAuth app required.
+- Q: Should the encounter panel and detail page location summary display the encounter method (walk, surf, fishing, etc.) alongside the provenance label? → A: Yes — show the method when available (e.g., "Walking," "Surfing," "Old Rod") in both the map encounter panel and the detail page location summary.
+- Docs-resolved: An authenticated user who visits the landing page MUST be redirected to the Pokédex browser (not remain on the landing page). Source: PRD FR-AUTH-006 and acceptance criteria.
+
+---
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 — New Visitor to Authenticated User (Priority: P1)
@@ -25,6 +37,7 @@ A first-time visitor arrives at the landing page, understands the product, and c
 3. **Given** a signed-in user, **When** they sign out, **Then** their session ends and any attempt to visit a protected route redirects to the authentication screen.
 4. **Given** an unauthenticated user who navigates directly to any protected URL, **When** the page loads, **Then** they are immediately redirected to the authentication screen with no protected data visible.
 5. **Given** a user on the auth screen who provides invalid credentials, **When** they submit, **Then** a clear, user-friendly error message is displayed and no access is granted.
+6. **Given** an already authenticated user who navigates to the landing page, **When** the page loads, **Then** they are automatically redirected to the Pokédex browser.
 
 ---
 
@@ -65,8 +78,9 @@ A signed-in user opens a Pokémon's detail page and sees its number, name, artwo
 5. **Given** a signed-in user on a detail page for a Pokémon with an evolution chain, **When** the evolution section loads, **Then** all Pokémon in the chain are shown with links to their respective detail pages.
 6. **Given** a signed-in user on a detail page for a Pokémon with location data, **When** the location section loads, **Then** a summary of encounter locations is shown, each with a provenance label ("pokeapi", "curated", "inferred", or "unknown").
 7. **Given** a signed-in user on a detail page for a Pokémon with no location data, **When** the location section loads, **Then** a graceful fallback message is shown (not an error).
-8. **Given** a signed-in user viewing a location entry, **When** they click the location link, **Then** they are taken to the Kanto map with that location in context.
-9. **Given** a signed-in user, **When** any section of the detail page is loading, **Then** a loading state is shown; if a section fails to load, a section-level error state with retry is shown.
+8. **Given** a signed-in user on any detail page, **When** the Pokédex entry section loads, **Then** the classic Red/Blue flavor text is shown (e.g., "A strange seed was planted on its back at birth…"); if no flavor text is available, a graceful fallback is shown.
+9. **Given** a signed-in user viewing a location entry, **When** they click the location link, **Then** they are taken to the Kanto map with that location in context.
+10. **Given** a signed-in user, **When** any section of the detail page is loading, **Then** a loading state is shown; if a section fails to load, a section-level error state with retry is shown.
 
 ---
 
@@ -109,9 +123,10 @@ A signed-in user opens the Kanto-inspired map, clicks or taps a location marker,
 
 - **FR-001**: The system MUST present a public landing page accessible without authentication, communicating the product name, value proposition, and a preview of core features.
 - **FR-002**: The landing page MUST include a primary call-to-action ("Open Pokédex" / "Get Started") that takes unauthenticated users to the authentication screen.
-- **FR-003**: The system MUST allow users to sign up and sign in via managed OAuth/social identity provider.
+- **FR-003**: The system MUST allow users to sign up and sign in via Google SSO, GitHub SSO, and email magic link (passwordless email login).
 - **FR-004**: The system MUST allow signed-in users to sign out, fully terminating their session and access to protected areas.
 - **FR-005**: The system MUST redirect any unauthenticated user who attempts to reach a protected route to the authentication screen, with no protected data exposed.
+- **FR-005b**: An authenticated user who visits the landing page MUST be automatically redirected to the Pokédex browser.
 - **FR-006**: The authentication screen MUST display clear, user-friendly error messages when sign-in fails.
 - **FR-007**: After successful authentication, the system MUST redirect the user to the Pokédex browser.
 
@@ -134,28 +149,30 @@ A signed-in user opens the Kanto-inspired map, clicks or taps a location marker,
 - **FR-019**: The detail page MUST display all abilities; hidden abilities MUST be clearly labeled "Hidden Ability."
 - **FR-020**: The detail page MUST display the Pokémon's height and weight.
 - **FR-021**: The detail page MUST display the full evolution chain; each Pokémon in the chain MUST link to its own detail page.
-- **FR-022**: The detail page MUST display a location/encounter summary; when no location data exists, a graceful fallback message MUST be shown (not an error).
-- **FR-023**: Each location entry MUST display a provenance label from the fixed vocabulary: "pokeapi", "curated", "inferred", or "unknown."
-- **FR-024**: Each location entry MUST include a link that opens the Kanto map with that location in context.
-- **FR-025**: The detail page MUST show loading and error states for each major data section independently.
+- **FR-022**: The detail page MUST display the Pokédex entry flavor text (preferring the English Red/Blue game version text); when no flavor text is available, a graceful fallback MUST be shown.
+- **FR-023**: The detail page MUST display a location/encounter summary; when no location data exists, a graceful fallback message MUST be shown (not an error).
+- **FR-024**: Each location entry MUST display a provenance label from the fixed vocabulary ("pokeapi", "curated", "inferred", or "unknown") and the encounter method (e.g., "Walking," "Surfing," "Old Rod") when available.
+- **FR-025**: Each location entry MUST include a link that opens the Kanto map with that location in context.
+- **FR-026**: The detail page MUST show loading and error states for each major data section independently.
 
 **Kanto Map**
 
-- **FR-026**: The Kanto map MUST display an original, retro-inspired visual Kanto map with clickable/tappable markers for each curated location.
-- **FR-027**: Clicking or tapping a marker MUST open an encounter panel for that location.
-- **FR-028**: Each encounter entry in the panel MUST show the Pokémon name and a provenance label from the fixed vocabulary.
-- **FR-029**: Each encounter entry MUST link to that Pokémon's detail page.
-- **FR-030**: The map and all encounter panels MUST be fully usable on mobile via touch.
-- **FR-031**: When opened via a location link from a detail page, the map MUST open with the referenced location in context.
-- **FR-032**: The map MUST show loading and error states.
+- **FR-027**: The Kanto map MUST display an original, retro-inspired visual Kanto map with clickable/tappable markers for each curated location.
+- **FR-028**: Clicking or tapping a marker MUST open an encounter panel for that location.
+- **FR-029**: Each encounter entry in the panel MUST show the Pokémon name, a provenance label from the fixed vocabulary, and the encounter method (e.g., "Walking," "Surfing," "Old Rod") when available.
+- **FR-030**: Each encounter entry MUST link to that Pokémon's detail page.
+- **FR-031**: The map and all encounter panels MUST be fully usable on mobile via touch.
+- **FR-032**: When opened via a location link from a detail page, the map MUST open with the referenced location in context.
+- **FR-033**: The map MUST show loading and error states.
+- **NOTE**: Filtering the map by Pokémon name or location name is deferred to Phase 2; the MVP map does not include a search or filter control.
 
 **Cross-Cutting Quality**
 
-- **FR-033**: Every data-driven view MUST have defined loading, empty (where applicable), and error states.
-- **FR-034**: The interface MUST be responsive across desktop, tablet, and mobile viewports.
-- **FR-035**: All primary interactions (browsing, search, filter, sort, map navigation, page navigation) MUST be keyboard-accessible.
-- **FR-036**: Type badges and map markers MUST meet WCAG 2.1 AA color-contrast standards.
-- **FR-037**: One user's data MUST never be readable or modifiable by another user.
+- **FR-034**: Every data-driven view MUST have defined loading, empty (where applicable), and error states.
+- **FR-035**: The interface MUST be responsive across desktop, tablet, and mobile viewports.
+- **FR-036**: All primary interactions (browsing, search, filter, sort, map navigation, page navigation) MUST be keyboard-accessible.
+- **FR-037**: Type badges and map markers MUST meet WCAG 2.1 AA color-contrast standards.
+- **FR-038**: One user's data MUST never be readable or modifiable by another user.
 
 ### Key Entities
 
@@ -176,7 +193,7 @@ A signed-in user opens the Kanto-inspired map, clicks or taps a location marker,
 - **SC-003**: All 151 Generation I Pokémon are visible to a signed-in user through the browser's default paginated view; zero Pokémon are missing.
 - **SC-004**: A user searching by partial name or number sees matching results appear within 1 second of input submission.
 - **SC-005**: Any combination of search, type filter, and sort produces correct, deterministic results that remain consistent when the user paginates.
-- **SC-006**: A user can open a detail page for every one of the 151 Pokémon and see all required data sections rendered or their appropriate fallback (no section missing or blank without explanation).
+- **SC-006**: A user can open a detail page for every one of the 151 Pokémon and see all required data sections rendered or their appropriate fallback: number, name, artwork, types, six stats, abilities (hidden marked), height/weight, Pokédex entry flavor text, evolution chain, and location summary.
 - **SC-007**: A user can open the Kanto map, tap or click any curated location marker, and see an encounter panel with at least one entry and a provenance label — verified on both a desktop browser and a mobile-sized viewport.
 - **SC-008**: Every unauthenticated attempt to access a protected route results in a redirect to the authentication screen with no protected data visible or exposed.
 - **SC-009**: Every major view shows a loading state while fetching, an error state on failure, and (where applicable) an empty state when no data matches criteria.
@@ -191,7 +208,7 @@ A signed-in user opens the Kanto-inspired map, clicks or taps a location marker,
 - **Data sync**: Pokémon data is synced from PokéAPI into the application's own data store at setup and on a schedule; the app does not call PokéAPI directly at runtime for browsing.
 - **Map art**: The Kanto map visual is an original, purpose-built retro-inspired illustration or SVG — not derived from official Pokémon game assets. Creating or commissioning this asset is a prerequisite before the map feature can be completed.
 - **Location coordinates**: The map coordinate layer (marker positions) is a product-owned, curated dataset separate from PokéAPI encounter data.
-- **Authentication provider**: Users authenticate via OAuth social login (e.g., Google and/or GitHub) through a managed identity provider. The application stores no passwords.
+- **Authentication provider**: Users authenticate via Google SSO, GitHub SSO, or email magic link through a managed identity provider. The application stores no passwords or credentials.
 - **Generations scope**: Only Generation I (Pokédex numbers 1–151) is in scope.
 - **Sprites and artwork**: PokéAPI official artwork and sprites are used for all 151 Pokémon.
 - **Encounter provenance**: For the MVP, encounter provenance labels are manually curated per encounter record; this is a curatorial responsibility, not an automated derivation.

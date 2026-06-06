@@ -31,6 +31,7 @@
 
 ## Notes
 
-- All items pass. No updates required before `/speckit-clarify` or `/speckit-plan`.
-- Map art asset (original retro Kanto illustration) is documented as a prerequisite assumption — not a blocker for spec, but must be resolved before map implementation begins.
-- Constitution v1.0.0 governs all security constraints; FR-005 and FR-037 align directly with SEC-001 through SEC-015.
+- All items pass. Spec is ready for `/speckit-plan`.
+- Clarification session 2026-06-06 resolved 4 questions and 1 docs-derived item. Spec updated with: flavor text on detail page (FR-022), encounter method in panels/summaries (FR-024, FR-029), email magic link as third auth provider (FR-003), map filter deferred to Phase 2, and authenticated-user landing page redirect (FR-005b, US-1 scenario 6).
+- Map art asset (original retro Kanto illustration) is documented as a prerequisite assumption — must be resolved before map implementation begins.
+- Constitution v1.0.0 governs all security constraints; FR-005 and FR-038 align directly with SEC-001 through SEC-015.
