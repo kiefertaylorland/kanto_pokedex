@@ -476,4 +476,5 @@ I created a new repo on GitHub, synced up locally, and began to setup the projec
 
 I setup **[GitHub Spec Kit](https://github.com/github/spec-kit)** in the repo and created the project's **`constitution.md`**, **`spec.md`**, and **`plan.md`** using the provided prompts from Claude Cowork.
 
-I also had to get GitHub, Cloudflare, and Supabase setup together.
+I also had to get GitHub, Cloudflare, and Supabase setup together and installed the necessary CLI tools and MCP servers.
+

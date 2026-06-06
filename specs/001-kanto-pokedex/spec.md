@@ -17,6 +17,15 @@
 - Q: Which fallback authentication method should the auth screen offer beyond Google and GitHub? → A: Email magic link — passwordless login via a link sent to the user's email; no third OAuth app required.
 - Q: Should the encounter panel and detail page location summary display the encounter method (walk, surf, fishing, etc.) alongside the provenance label? → A: Yes — show the method when available (e.g., "Walking," "Surfing," "Old Rod") in both the map encounter panel and the detail page location summary.
 - Docs-resolved: An authenticated user who visits the landing page MUST be redirected to the Pokédex browser (not remain on the landing page). Source: PRD FR-AUTH-006 and acceptance criteria.
+- Q: Should search/filter/sort/page state be preserved in URL query parameters or in-memory? → A: URL query parameters — shareable, bookmarkable, back-button support.
+- Q: Should encounter_method be an attribute on the Encounter entity? → A: Yes — stored as optional field on Encounter, populated during PokéAPI sync.
+- Q: What is the status of the Kanto map art asset? → A: Built as SVG in code during development — no external dependency.
+- Q: What is the fixed page size for the Pokédex browser? → A: 20 Pokémon per page.
+- Q: Should the Kanto map support panning and pinch-to-zoom on mobile? → A: No — fixed static viewport that scales to fit the screen; all markers accessible without pan/zoom.
+- Q: How should a numeric search query match Pokédex numbers? → A: Exact number match — a purely numeric query matches only that exact Pokédex number (e.g., "25" → only #025); name queries remain case-insensitive substring matches.
+- Q: Can users select multiple types in the filter, and how do selections combine? → A: Multi-select with OR/union — results include any Pokémon matching at least one selected type.
+- Q: What is the MVP sync-trigger surface and role model? → A: Scheduled and/or server-side (service-role) invocation; no in-app admin role or admin UI — all authenticated users have identical access.
+- Q: Does the public landing page preview render live Pokémon data? → A: No — the preview is static/illustrative only; no live protected data is fetched on the public landing page.
 
 ---
 
@@ -52,7 +61,7 @@ A signed-in user browses all 151 original Pokémon, searches by name or number, 
 **Acceptance Scenarios**:
 
 1. **Given** a signed-in user on the Pokédex browser, **When** the page loads, **Then** Pokémon cards are shown (paginated), each displaying Pokédex number, name, sprite/artwork, and type(s).
-2. **Given** a signed-in user, **When** they type "char" in the search field, **Then** only Pokémon whose names contain "char" (case-insensitive) or whose numbers match are shown.
+2. **Given** a signed-in user, **When** they type "char" in the search field, **Then** only Pokémon whose names contain "char" (case-insensitive) or, for a purely numeric query, whose Pokédex number exactly matches are shown.
 3. **Given** a signed-in user, **When** they select "Fire" in the type filter, **Then** only Fire-type Pokémon are shown.
 4. **Given** a signed-in user, **When** they sort by "Base Stat Total", **Then** Pokémon are ordered deterministically by the sum of their six base stats; ties are resolved by Pokédex number.
 5. **Given** a signed-in user who has applied a search term, type filter, and sort, **When** they navigate to page 2, **Then** all applied search, filter, and sort selections remain active.
@@ -97,7 +106,7 @@ A signed-in user opens the Kanto-inspired map, clicks or taps a location marker,
 1. **Given** a signed-in user who navigates to the Kanto map, **When** the map loads, **Then** an original retro-inspired Kanto map is shown with clickable/tappable markers for each curated location.
 2. **Given** a signed-in user on the map, **When** they click or tap a location marker, **Then** a panel opens listing the Pokémon encounters for that location, each with a provenance label.
 3. **Given** a signed-in user viewing an encounter panel, **When** they click or tap a Pokémon's name/link, **Then** they are navigated to that Pokémon's detail page.
-4. **Given** a signed-in user on a mobile-sized viewport, **When** they tap a location marker, **Then** the encounter panel opens fully and is usable via touch, with no content clipped or inaccessible.
+4. **Given** a signed-in user on a mobile-sized viewport, **When** they tap a location marker, **Then** the encounter panel opens fully and is usable via touch, with no content clipped or inaccessible; the map renders as a fixed, scale-to-fit viewport with all markers visible without panning or zooming.
 5. **Given** a signed-in user who arrived at the map via a location link from a detail page, **When** the map loads, **Then** the referenced location's panel is open or the location is visually highlighted in context.
 6. **Given** a signed-in user, **When** the map fails to load, **Then** an error state with a retry option is shown.
 
@@ -121,7 +130,7 @@ A signed-in user opens the Kanto-inspired map, clicks or taps a location marker,
 
 **Authentication & Landing**
 
-- **FR-001**: The system MUST present a public landing page accessible without authentication, communicating the product name, value proposition, and a preview of core features.
+- **FR-001**: The system MUST present a public landing page accessible without authentication, communicating the product name, value proposition, and a preview of core features. The feature preview MUST be static/illustrative and MUST NOT fetch live protected Pokémon data; no protected dataset is exposed on the public landing page.
 - **FR-002**: The landing page MUST include a primary call-to-action ("Open Pokédex" / "Get Started") that takes unauthenticated users to the authentication screen.
 - **FR-003**: The system MUST allow users to sign up and sign in via Google SSO, GitHub SSO, and email magic link (passwordless email login).
 - **FR-004**: The system MUST allow signed-in users to sign out, fully terminating their session and access to protected areas.
@@ -134,11 +143,11 @@ A signed-in user opens the Kanto-inspired map, clicks or taps a location marker,
 
 - **FR-008**: The Pokédex browser MUST display all 151 Generation I Pokémon.
 - **FR-009**: Each Pokémon card MUST display: Pokédex number, name, sprite/artwork, and type(s).
-- **FR-010**: Users MUST be able to search by Pokémon name or number; partial matches and case-insensitive input MUST be supported.
-- **FR-011**: Users MUST be able to filter displayed Pokémon by type; multi-type Pokémon MUST appear when any of their types is selected.
+- **FR-010**: Users MUST be able to search by Pokémon name or number. Name matching MUST be case-insensitive substring (partial) matching. A purely numeric query MUST match only the exact Pokédex number (e.g., "25" matches only #025).
+- **FR-011**: Users MUST be able to filter displayed Pokémon by type via a multi-select control; selected types MUST combine by union (OR) — results include any Pokémon matching at least one selected type, so multi-type Pokémon appear when any of their types is selected.
 - **FR-012**: Users MUST be able to sort by Pokédex number, name (alphabetical), or base-stat total (sum of all six stats); sort order MUST be deterministic (ties broken by Pokédex number).
-- **FR-013**: Results MUST be paginated with a fixed page size.
-- **FR-014**: Search term, active type filter, sort selection, and current page MUST all be preserved as the user interacts.
+- **FR-013**: Results MUST be paginated with a fixed page size of 20 Pokémon per page.
+- **FR-014**: Search term, active type filter, sort selection, and current page MUST all be preserved as the user interacts via URL query parameters, enabling shareable, bookmarkable URLs and correct browser back/forward navigation.
 - **FR-015**: The browser MUST show a loading state while data is fetching, an empty state when no results match, and an error state when data cannot be retrieved.
 
 **Pokémon Detail Page**
@@ -161,7 +170,7 @@ A signed-in user opens the Kanto-inspired map, clicks or taps a location marker,
 - **FR-028**: Clicking or tapping a marker MUST open an encounter panel for that location.
 - **FR-029**: Each encounter entry in the panel MUST show the Pokémon name, a provenance label from the fixed vocabulary, and the encounter method (e.g., "Walking," "Surfing," "Old Rod") when available.
 - **FR-030**: Each encounter entry MUST link to that Pokémon's detail page.
-- **FR-031**: The map and all encounter panels MUST be fully usable on mobile via touch.
+- **FR-031**: The map MUST render as a fixed, scale-to-fit viewport on all screen sizes with all curated location markers visible; touch-tap on any marker MUST open the encounter panel. No pan or pinch-to-zoom is required for the MVP.
 - **FR-032**: When opened via a location link from a detail page, the map MUST open with the referenced location in context.
 - **FR-033**: The map MUST show loading and error states.
 - **NOTE**: Filtering the map by Pokémon name or location name is deferred to Phase 2; the MVP map does not include a search or filter control.
@@ -179,8 +188,8 @@ A signed-in user opens the Kanto-inspired map, clicks or taps a location marker,
 - **Pokémon**: Canonical record for one of the 151 Generation I Pokémon. Attributes: Pokédex number (1–151), name, types (1–2), six base stats, abilities (regular + optional hidden), height, weight, sprite URL, artwork URL, evolution chain reference.
 - **Evolution Chain**: An ordered sequence linking Pokémon that evolve from one another. Contains references and display names for each stage.
 - **Kanto Location**: A named Kanto area with curated map coordinates. Attributes: name, map coordinates (for marker placement), optional description.
-- **Encounter**: A relationship between a Pokémon and a Kanto Location. Attributes: Pokémon reference, location reference, provenance label ("pokeapi" | "curated" | "inferred" | "unknown").
-- **User**: A registered account. Identity is fully managed by the authentication provider. The application stores only a minimal, non-sensitive profile record keyed to the provider's user ID.
+- **Encounter**: A relationship between a Pokémon and a Kanto Location. Attributes: Pokémon reference, location reference, provenance label ("pokeapi" | "curated" | "inferred" | "unknown"), encounter_method (optional string, e.g., "Walking", "Surfing", "Old Rod", "Good Rod", "Super Rod") — sourced from PokéAPI encounter data during sync.
+- **User**: A registered account. Identity is fully managed by the authentication provider. The application stores only a minimal, non-sensitive profile record keyed to the provider's user ID. The profile carries no role/privilege attribute in the MVP — all authenticated users have identical access (no admin role).
 
 ---
 
@@ -206,7 +215,8 @@ A signed-in user opens the Kanto-inspired map, clicks or taps a location marker,
 
 - **Data source**: PokéAPI (https://pokeapi.co) is the upstream source for Pokémon data (stats, abilities, types, evolution chains, and raw encounter data).
 - **Data sync**: Pokémon data is synced from PokéAPI into the application's own data store at setup and on a schedule; the app does not call PokéAPI directly at runtime for browsing.
-- **Map art**: The Kanto map visual is an original, purpose-built retro-inspired illustration or SVG — not derived from official Pokémon game assets. Creating or commissioning this asset is a prerequisite before the map feature can be completed.
+- **Sync trigger & roles**: The sync runs only on a schedule and/or via server-side (service-role) invocation; it is never triggered from the client. There is no in-app admin role or admin UI in the MVP — all authenticated users have identical access.
+- **Map art**: The Kanto map visual is an original, purpose-built retro-inspired SVG built as part of the application codebase during development — not derived from official Pokémon game assets. No external asset needs to be created or commissioned before the map feature can begin.
 - **Location coordinates**: The map coordinate layer (marker positions) is a product-owned, curated dataset separate from PokéAPI encounter data.
 - **Authentication provider**: Users authenticate via Google SSO, GitHub SSO, or email magic link through a managed identity provider. The application stores no passwords or credentials.
 - **Generations scope**: Only Generation I (Pokédex numbers 1–151) is in scope.
