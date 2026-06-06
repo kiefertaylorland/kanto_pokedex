@@ -1,4 +1,9 @@
-# CLAUDE.md
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
+<!-- SPECKIT END -->
+
+# AGENTS.md
 
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 
@@ -63,3 +68,32 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+
+## Project Documentation
+
+When you need context on any of the following topics, read the corresponding
+file in `docs/` before responding or making changes.
+
+| File | When to read |
+|---|---|
+| `docs/01-executive-summary.md` | Understanding project purpose & scope |
+| `docs/02-assumptions-open-questions-resolved.md` | Resolving ambiguities or open questions |
+| `docs/03-sdlc-plan.md` | Development process, branching, QA gates |
+| `docs/04-brd-business-requirements-document.md` | Business rules & stakeholder needs |
+| `docs/05-prd-product-requirements-document.md` | Feature requirements & acceptance criteria |
+| `docs/06-technical-specification.md` | Architecture, APIs, integrations |
+| `docs/07-data-model.md` | Database schema, entity relationships |
+| `docs/08-recommended-architecture-decisions.md` | ADRs and design rationale |
+| `docs/09-delivery-roadmap.md` | Milestones and phasing |
+| `docs/10-next-steps.md` | Current priorities and open work |
+
+## Security Constitution
+
+MANDATORY: Before implementing or reviewing any feature that involves
+authentication, authorization, secrets, input validation, data persistence,
+HTTP headers, error handling, or admin operations — read
+`.specify/memory/constitution.md` in full and ensure all work complies with
+the principles defined there.
+
+Do not skip this step. If constitution principles conflict with a user
+request, surface the conflict and ask before proceeding.
