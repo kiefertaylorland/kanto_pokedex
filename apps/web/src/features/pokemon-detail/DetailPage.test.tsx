@@ -84,7 +84,7 @@ function renderDetail() {
 beforeEach(() => {
   FakeAudio.instances = [];
   vi.stubGlobal('Audio', FakeAudio as unknown as typeof Audio);
-  window.scrollTo = vi.fn(); // jsdom doesn't implement it; router scroll restoration calls it
+  vi.stubGlobal('scrollTo', vi.fn()); // jsdom doesn't implement it; router scroll restoration calls it
 
   vi.mocked(fetchPokemonDetail).mockResolvedValue(PIKACHU);
   localStorage.clear();

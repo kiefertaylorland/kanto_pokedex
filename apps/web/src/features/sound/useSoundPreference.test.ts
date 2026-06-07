@@ -5,12 +5,9 @@ import { useSoundPreference, isSoundEnabled, toggleSound, SOUND_STORAGE_KEY } fr
 describe('useSoundPreference', () => {
   beforeEach(() => {
     localStorage.clear();
-    // Module-level cache must be reset between tests; the storage event does that.
-    window.dispatchEvent(new StorageEvent('storage', { key: SOUND_STORAGE_KEY }));
   });
   afterEach(() => {
     localStorage.clear();
-    window.dispatchEvent(new StorageEvent('storage', { key: SOUND_STORAGE_KEY }));
   });
 
   it('defaults to ON when nothing is stored', () => {
@@ -32,7 +29,6 @@ describe('useSoundPreference', () => {
 
   it('reads a stored "false" as disabled', () => {
     localStorage.setItem(SOUND_STORAGE_KEY, 'false');
-    window.dispatchEvent(new StorageEvent('storage', { key: SOUND_STORAGE_KEY }));
     const { result } = renderHook(() => useSoundPreference());
     expect(result.current.enabled).toBe(false);
   });

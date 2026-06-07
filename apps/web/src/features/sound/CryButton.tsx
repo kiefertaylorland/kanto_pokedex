@@ -27,7 +27,7 @@ export function CryButton({
       onClick={onPlay}
       className={cn(
         'inline-flex h-9 w-9 items-center justify-center rounded-sm border-2 border-border-strong bg-surface text-ink-700 transition-colors',
-        'hover:bg-surface-2 disabled:cursor-not-allowed disabled:text-ink-400 disabled:opacity-60',
+        'enabled:hover:bg-surface-2 disabled:cursor-not-allowed disabled:text-ink-400 disabled:opacity-60',
         className,
       )}
     >
