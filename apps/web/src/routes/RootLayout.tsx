@@ -2,6 +2,7 @@ import { Link, Outlet } from '@tanstack/react-router';
 import { useAuth } from '@/features/auth/auth';
 import { Button } from '@/components/ui/button';
 import { PokeballMark } from '@/components/PokeballMark';
+import { SoundToggle } from '@/features/sound/SoundToggle';
 
 /** App shell: header nav + routed outlet. Header adapts to auth state. */
 export function RootLayout() {
@@ -15,6 +16,7 @@ export function RootLayout() {
             Kanto Pokédex
           </Link>
           <nav className="flex items-center gap-2">
+            <SoundToggle />
             {isAuthenticated ? (
               <>
                 <Button asChild variant="ghost" size="sm" className="text-white hover:bg-white/10">

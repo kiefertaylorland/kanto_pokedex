@@ -20,6 +20,10 @@ import { Button } from '@/components/ui/button';
 import { FavStar } from '@/components/FavStar';
 import { NotFound } from '@/routes/NotFound';
 import { useFavorites } from '@/features/favorites/useFavorites';
+import { useSoundPreference, isSoundEnabled } from '@/features/sound/useSoundPreference';
+import { useCry } from '@/features/sound/useCry';
+import { cryUrl } from '@/features/sound/cry';
+import { CryButton } from '@/features/sound/CryButton';
 import * as React from 'react';
 
 /** Pokémon detail page (FR-016..026). */
@@ -29,6 +33,8 @@ export function DetailPage() {
   const dexId = parseDexId(raw);
   const numericRaw = /^\d+$/.test(raw) ? raw : undefined;
   const { isFavorite, toggle } = useFavorites();
+  const { enabled: soundEnabled } = useSoundPreference();
+  const { play } = useCry();
 
   React.useEffect(() => {
     if (dexId !== null) track('detail_viewed');
@@ -39,6 +45,14 @@ export function DetailPage() {
     queryFn: () => fetchPokemonDetail(dexId as number),
     enabled: dexId !== null,
   });
+
+  // Auto-play the cry once per Pokémon as its details appear (sound permitting).
+  // Keyed on the loaded id so it fires on navigation, not on unrelated re-renders
+  // or sound-toggle changes; `isSoundEnabled()` reads the live preference.
+  const loadedId = result.data?.id ?? null;
+  React.useEffect(() => {
+    if (loadedId !== null && isSoundEnabled()) play(cryUrl(loadedId));
+  }, [loadedId, play]);
 
   if (dexId === null) {
     return <NotFound dexId={numericRaw} />;
@@ -64,7 +78,7 @@ export function DetailPage() {
         className="flex flex-col items-center gap-4 rounded-md border-2 border-border-strong bg-surface-2 p-4 sm:flex-row sm:items-start"
         style={primaryType ? { backgroundColor: TYPE_TINTS[primaryType] } : undefined}
       >
-        <div className="flex h-48 w-48 shrink-0 items-center justify-center rounded-md bg-surface/70">
+        <div className="relative flex h-48 w-48 shrink-0 items-center justify-center rounded-md bg-surface/70">
           {p.official_artwork_url || p.sprite_url ? (
             <img
               src={p.official_artwork_url ?? p.sprite_url ?? ''}
@@ -76,6 +90,12 @@ export function DetailPage() {
           ) : (
             <span className="text-sm text-ink-500">No image</span>
           )}
+          <CryButton
+            onPlay={() => play(cryUrl(p.id))}
+            enabled={soundEnabled}
+            name={p.display_name}
+            className="absolute bottom-1 right-1"
+          />
         </div>
         <div className="space-y-2 text-center sm:text-left">
           <p className="font-display text-sm text-ink-500">№{dex}</p>

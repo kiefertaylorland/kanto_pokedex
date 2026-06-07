@@ -8,9 +8,12 @@
 #  - connect-src is pinned to Supabase (REST + Realtime) and the Sentry ingest.
 #    The browser never calls PokéAPI directly (sync is server-side).
 #  - img-src allows Supabase + the PokéAPI sprite host (raw.githubusercontent.com).
+#  - media-src allows the same PokéAPI host: Pokémon cries are .ogg files served
+#    from raw.githubusercontent.com (same origin as sprites). This extends an
+#    already-trusted host and does not relax script-src (SEC-011).
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://raw.githubusercontent.com https://*.supabase.co; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://raw.githubusercontent.com https://*.supabase.co; media-src 'self' https://raw.githubusercontent.com; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
