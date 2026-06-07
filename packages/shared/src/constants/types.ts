@@ -4,8 +4,8 @@
 // downstream breaks. Two changes:
 //   1. TYPE_COLORS hexes swapped to the AA-verified deep hues (white text ≥4.5:1).
 //   2. Added TYPE_TINTS (non-text accents) for headers / card wells / marker fills.
-// Gen-I ships 15 types; the full 18 are included in TYPE_TINTS for forward-compat
-// but TYPE_NAMES stays at 15 to match the current National-Dex 1–151 scope.
+// Gen-I ships 15 types; TYPE_NAMES (and thus TypeName/TYPE_COLORS/TYPE_TINTS) stays at 15
+// to match the current National-Dex 1–151 scope.
 // ============================================================
 
 /** The 15 Pokémon types present in Generation I (National Dex 1–151). */
