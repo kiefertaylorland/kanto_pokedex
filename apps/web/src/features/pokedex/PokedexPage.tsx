@@ -37,7 +37,7 @@ export function PokedexPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Pokédex</h1>
+      <h1 className="text-2xl font-bold text-ink-900">Pokédex</h1>
       <FilterBar query={query} onChange={update} />
 
       {result.isLoading ? (
@@ -48,7 +48,7 @@ export function PokedexPage() {
         <EmptyState title="No Pokémon match your search." hint="Try a different name, number, or type filter." />
       ) : (
         <>
-          <p className="text-sm text-zinc-500" aria-live="polite">
+          <p className="text-sm text-ink-500" aria-live="polite">
             {result.data.total} result{result.data.total === 1 ? '' : 's'} · page {result.data.page} of {result.data.pageCount}
           </p>
           <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
@@ -68,7 +68,7 @@ export function PokedexPage() {
             >
               Previous
             </Button>
-            <span className="text-sm text-zinc-500">
+            <span className="text-sm font-mono text-ink-700" aria-current="page">
               {result.data.page} / {result.data.pageCount}
             </span>
             <Button
@@ -80,7 +80,7 @@ export function PokedexPage() {
               Next
             </Button>
           </nav>
-          <p className="text-center text-xs text-zinc-400">Showing up to {PAGE_SIZE} per page.</p>
+          <p className="text-center text-xs text-ink-500">Showing up to {PAGE_SIZE} per page.</p>
         </>
       )}
     </div>

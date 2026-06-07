@@ -14,6 +14,7 @@ export default tseslint.config(
       '**/playwright-report/**',
       '**/test-results/**',
       'supabase/functions/**', // Deno runtime — linted separately by Deno tooling
+      'design_handoff_kanto_design_system/**', // delivery artifact — reference snippets, not app code
     ],
   },
   js.configs.recommended,

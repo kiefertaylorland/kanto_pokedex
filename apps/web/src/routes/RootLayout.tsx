@@ -7,7 +7,7 @@ export function RootLayout() {
   const { isAuthenticated, signOut } = useAuth();
   return (
     <div className="min-h-screen">
-      <header className="border-b border-zinc-200 bg-pokedex-red text-white dark:border-zinc-800">
+      <header className="border-b-2 border-border-strong bg-brand-600 text-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <Link to="/" className="flex items-center gap-2 font-bold tracking-tight">
             <span className="inline-block h-4 w-4 rounded-full border-2 border-white bg-white" aria-hidden />

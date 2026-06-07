@@ -4,7 +4,7 @@ import { type TypeName, typeDisplayName, TYPE_COLORS } from '@kanto/shared';
 export function TypeBadge({ type }: { type: TypeName }) {
   return (
     <span
-      className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold text-white shadow-sm"
+      className="inline-flex items-center rounded-sm px-2.5 py-0.5 text-xs font-semibold text-white shadow-sm"
       style={{ backgroundColor: TYPE_COLORS[type] }}
     >
       {typeDisplayName(type)}

@@ -4,7 +4,7 @@ import {
   parseDexId,
   STAT_DISPLAY,
   MAX_BASE_STAT,
-  CONFIDENCE_DISPLAY,
+  TYPE_TINTS,
   type StatKey,
 } from '@kanto/shared';
 import { queryKeys } from '@/lib/queryKeys';
@@ -13,6 +13,7 @@ import { track } from '@/lib/analytics';
 import { fetchPokemonDetail } from './api';
 import { TypeBadge } from '@/components/TypeBadge';
 import { Badge } from '@/components/ui/badge';
+import { ConfidenceLabel } from '@/components/ConfidenceLabel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingState, ErrorState, EmptyState } from '@/components/state';
 import * as React from 'react';
@@ -43,42 +44,47 @@ export function DetailPage() {
 
   const p = result.data;
   const dex = String(p.national_dex_number).padStart(3, '0');
+  const primaryType = p.types[0];
 
   return (
     <article className="space-y-6">
-      <Link to="/pokedex" className="text-sm text-zinc-500 hover:underline">
+      <Link to="/pokedex" className="text-sm text-ink-500 hover:underline">
         ← Back to Pokédex
       </Link>
 
-      <header className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
-        {p.official_artwork_url || p.sprite_url ? (
-          <img
-            src={p.official_artwork_url ?? p.sprite_url ?? ''}
-            alt={p.display_name}
-            width={200}
-            height={200}
-            className="h-48 w-48 object-contain"
-          />
-        ) : (
-          <div className="flex h-48 w-48 items-center justify-center rounded-lg bg-zinc-100 text-sm text-zinc-400 dark:bg-zinc-800">
-            No image
-          </div>
-        )}
+      {/* Type-tinted detail rail: the header well takes the primary type's tint. */}
+      <header
+        className="flex flex-col items-center gap-4 rounded-md border-2 border-border-strong bg-surface-2 p-4 sm:flex-row sm:items-start"
+        style={primaryType ? { backgroundColor: TYPE_TINTS[primaryType] } : undefined}
+      >
+        <div className="flex h-48 w-48 shrink-0 items-center justify-center rounded-md bg-surface/70">
+          {p.official_artwork_url || p.sprite_url ? (
+            <img
+              src={p.official_artwork_url ?? p.sprite_url ?? ''}
+              alt={p.display_name}
+              width={184}
+              height={184}
+              className="h-44 w-44 object-contain"
+            />
+          ) : (
+            <span className="text-sm text-ink-500">No image</span>
+          )}
+        </div>
         <div className="space-y-2 text-center sm:text-left">
-          <p className="font-mono text-sm text-zinc-400">#{dex}</p>
-          <h1 className="text-3xl font-bold">{p.display_name}</h1>
+          <p className="font-mono text-sm text-ink-500">#{dex}</p>
+          <h1 className="text-3xl font-bold text-ink-900">{p.display_name}</h1>
           <div className="flex flex-wrap justify-center gap-1 sm:justify-start">
             {p.types.map((t) => (
               <TypeBadge key={t} type={t} />
             ))}
           </div>
-          <dl className="flex gap-6 pt-1 text-sm text-zinc-600 dark:text-zinc-300">
+          <dl className="flex gap-6 pt-1 text-sm text-ink-700">
             <div>
-              <dt className="text-xs text-zinc-400">Height</dt>
+              <dt className="text-xs text-ink-500">Height</dt>
               <dd>{p.height !== null ? `${p.height / 10} m` : '—'}</dd>
             </div>
             <div>
-              <dt className="text-xs text-zinc-400">Weight</dt>
+              <dt className="text-xs text-ink-500">Weight</dt>
               <dd>{p.weight !== null ? `${p.weight / 10} kg` : '—'}</dd>
             </div>
           </dl>
@@ -88,8 +94,8 @@ export function DetailPage() {
       {p.flavor_text && (
         <Card>
           <CardContent className="p-4">
-            <p className="italic text-zinc-700 dark:text-zinc-300">{p.flavor_text}</p>
-            <p className="mt-1 text-xs text-zinc-400">Pokémon Red/Blue</p>
+            <p className="italic text-ink-700">{p.flavor_text}</p>
+            <p className="mt-1 text-xs text-ink-500">Pokémon Red/Blue</p>
           </CardContent>
         </Card>
       )}
@@ -101,11 +107,11 @@ export function DetailPage() {
           </CardHeader>
           <CardContent className="space-y-2">
             {p.stats.length === 0 ? (
-              <p className="text-sm text-zinc-400">Stats unavailable.</p>
+              <p className="text-sm text-ink-500">Stats unavailable.</p>
             ) : (
               p.stats.map((s) => <StatBar key={s.key} statKey={s.key} value={s.base_stat} />)
             )}
-            <p className="pt-2 text-sm font-semibold">Total: {p.base_stat_total}</p>
+            <p className="pt-2 text-sm font-semibold text-ink-900">Total: {p.base_stat_total}</p>
           </CardContent>
         </Card>
 
@@ -115,7 +121,7 @@ export function DetailPage() {
           </CardHeader>
           <CardContent className="space-y-2">
             {p.abilities.length === 0 ? (
-              <p className="text-sm text-zinc-400">Abilities unavailable.</p>
+              <p className="text-sm text-ink-500">Abilities unavailable.</p>
             ) : (
               <ul className="space-y-1">
                 {p.abilities.map((a) => (
@@ -136,16 +142,16 @@ export function DetailPage() {
         </CardHeader>
         <CardContent>
           {p.evolution_chain.length <= 1 ? (
-            <p className="text-sm text-zinc-400">This Pokémon does not evolve.</p>
+            <p className="text-sm text-ink-500">This Pokémon does not evolve.</p>
           ) : (
             <ol className="flex flex-wrap items-center gap-2 text-sm">
               {p.evolution_chain.map((node, i) => (
                 <li key={node.species_id} className="flex items-center gap-2">
-                  {i > 0 && <span className="text-zinc-400">→</span>}
+                  {i > 0 && <span className="text-ink-500">→</span>}
                   <Link
                     to="/pokemon/$dexId"
                     params={{ dexId: String(node.species_id) }}
-                    className="rounded border border-zinc-200 px-2 py-1 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                    className="rounded-sm border border-border-strong px-2 py-1 text-ink-700 hover:bg-surface-2"
                   >
                     {node.display_name}
                     {node.min_level ? ` (Lv ${node.min_level})` : node.trigger ? ` (${node.trigger})` : ''}
@@ -163,7 +169,7 @@ export function DetailPage() {
         </CardHeader>
         <CardContent>
           {p.encounters.length === 0 ? (
-            <p className="text-sm text-zinc-400">No recorded Kanto encounters.</p>
+            <p className="text-sm text-ink-500">No recorded Kanto encounters.</p>
           ) : (
             <ul className="space-y-2">
               {p.encounters.map((e, i) => (
@@ -172,15 +178,15 @@ export function DetailPage() {
                     <Link
                       to="/map"
                       search={{ location: e.kanto_location_id }}
-                      className="font-medium hover:underline"
+                      className="font-medium text-ink-900 hover:underline"
                     >
                       {e.location_display_name ?? 'Unknown location'}
                     </Link>
                   ) : (
-                    <span className="font-medium">{e.location_display_name ?? 'Unknown location'}</span>
+                    <span className="font-medium text-ink-900">{e.location_display_name ?? 'Unknown location'}</span>
                   )}
-                  {e.method && <span className="text-zinc-500">· {e.method}</span>}
-                  <Badge tone="muted">{CONFIDENCE_DISPLAY[e.confidence]}</Badge>
+                  {e.method && <span className="text-ink-500">· {e.method}</span>}
+                  <ConfidenceLabel confidence={e.confidence} />
                 </li>
               ))}
             </ul>
@@ -191,14 +197,22 @@ export function DetailPage() {
   );
 }
 
+/** Stat-bar magnitude tier — color reinforces the numeric value (never the sole signal). */
+function statTierColor(value: number): string {
+  if (value >= 120) return 'bg-stat-elite';
+  if (value >= 90) return 'bg-stat-high';
+  if (value >= 60) return 'bg-stat-mid';
+  return 'bg-stat-low';
+}
+
 function StatBar({ statKey, value }: { statKey: StatKey; value: number }) {
   const pct = Math.min(100, Math.round((value / MAX_BASE_STAT) * 100));
   return (
     <div className="flex items-center gap-2">
-      <span className="w-16 shrink-0 text-xs text-zinc-500">{STAT_DISPLAY[statKey]}</span>
-      <span className="w-8 shrink-0 text-right text-xs font-mono">{value}</span>
-      <div className="h-2 flex-1 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
-        <div className="h-full rounded-full bg-pokedex-red" style={{ width: `${pct}%` }} aria-hidden />
+      <span className="w-16 shrink-0 text-xs text-ink-500">{STAT_DISPLAY[statKey]}</span>
+      <span className="w-8 shrink-0 text-right font-mono text-xs text-ink-900">{value}</span>
+      <div className="h-2 flex-1 overflow-hidden rounded-none bg-surface-3">
+        <div className={`h-full rounded-none ${statTierColor(value)}`} style={{ width: `${pct}%` }} aria-hidden />
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ export function LandingPage() {
     <div className="flex flex-col items-center gap-10 py-8 text-center">
       <section className="max-w-2xl space-y-4">
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">The Kanto Pokédex</h1>
-        <p className="text-lg text-zinc-600 dark:text-zinc-300">
+        <p className="text-lg text-ink-700">
           Browse all 151 original Pokémon — search, filter by type, inspect stats and evolutions, and explore where
           each one appears across the Kanto region.
         </p>
@@ -31,7 +31,7 @@ export function LandingPage() {
             <Link to="/auth">Sign in to explore</Link>
           </Button>
         </div>
-        <p className="text-xs text-zinc-500 dark:text-zinc-400">Sign in with Google, GitHub, or an email magic link.</p>
+        <p className="text-xs text-ink-500">Sign in with Google, GitHub, or an email magic link.</p>
       </section>
 
       <section aria-label="Preview" className="w-full max-w-3xl">
@@ -39,7 +39,7 @@ export function LandingPage() {
           {PREVIEW.map((p) => (
             <Card key={p.dex} className="overflow-hidden">
               <CardContent className="flex flex-col items-center gap-2 p-4">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-zinc-100 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-surface-2 font-mono text-xs text-ink-500">
                   #{p.dex}
                 </div>
                 <span className="text-sm font-medium">{p.name}</span>
@@ -47,7 +47,7 @@ export function LandingPage() {
             </Card>
           ))}
         </div>
-        <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400">Illustrative preview — sign in to see live data.</p>
+        <p className="mt-3 text-xs text-ink-500">Illustrative preview — sign in to see live data.</p>
       </section>
     </div>
   );
