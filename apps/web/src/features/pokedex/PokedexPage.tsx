@@ -1,4 +1,4 @@
-import { useSearch, useNavigate } from '@tanstack/react-router';
+import { useSearch, useNavigate, Link } from '@tanstack/react-router';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { browserSearchInput, resolveBrowserQuery, PAGE_SIZE, type BrowserQuery } from '@kanto/shared';
 import { queryKeys } from '@/lib/queryKeys';
@@ -9,6 +9,7 @@ import { FilterBar } from './FilterBar';
 import { PokemonCardItem } from './PokemonCardItem';
 import { LoadingState, ErrorState, EmptyState } from '@/components/state';
 import { Button } from '@/components/ui/button';
+import { useFavorites } from '@/features/favorites/useFavorites';
 
 /**
  * Pokédex browser (FR-008..015). All view state lives in the URL query string
@@ -18,6 +19,7 @@ import { Button } from '@/components/ui/button';
 export function PokedexPage() {
   const rawSearch = useSearch({ strict: false });
   const navigate = useNavigate();
+  const { count: favoritesCount } = useFavorites();
   const query: BrowserQuery = resolveBrowserQuery(browserSearchInput.parse(rawSearch));
 
   const result = useQuery({
@@ -37,7 +39,17 @@ export function PokedexPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold text-ink-900">Pokédex</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="font-display text-2xl text-ink-900">Pokédex</h1>
+        <div className="flex items-center gap-2">
+          <Button asChild variant="secondary" size="sm">
+            <Link to="/favorites">★ Favorites · {favoritesCount}</Link>
+          </Button>
+          <Button asChild variant="secondary" size="sm">
+            <Link to="/compare">Compare</Link>
+          </Button>
+        </div>
+      </div>
       <FilterBar query={query} onChange={update} />
 
       {result.isLoading ? (

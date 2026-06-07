@@ -15,13 +15,20 @@ import { TypeBadge } from '@/components/TypeBadge';
 import { Badge } from '@/components/ui/badge';
 import { ConfidenceLabel } from '@/components/ConfidenceLabel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LoadingState, ErrorState, EmptyState } from '@/components/state';
+import { LoadingState, ErrorState } from '@/components/state';
+import { Button } from '@/components/ui/button';
+import { FavStar } from '@/components/FavStar';
+import { NotFound } from '@/routes/NotFound';
+import { useFavorites } from '@/features/favorites/useFavorites';
 import * as React from 'react';
 
 /** Pokémon detail page (FR-016..026). */
 export function DetailPage() {
   const params = useParams({ strict: false }) as { dexId?: string };
-  const dexId = parseDexId(params.dexId ?? '');
+  const raw = params.dexId ?? '';
+  const dexId = parseDexId(raw);
+  const numericRaw = /^\d+$/.test(raw) ? raw : undefined;
+  const { isFavorite, toggle } = useFavorites();
 
   React.useEffect(() => {
     if (dexId !== null) track('detail_viewed');
@@ -34,12 +41,12 @@ export function DetailPage() {
   });
 
   if (dexId === null) {
-    return <EmptyState title="That Pokémon doesn’t exist." hint="The Kanto Pokédex covers numbers 1–151." />;
+    return <NotFound dexId={numericRaw} />;
   }
   if (result.isLoading) return <LoadingState label="Loading Pokémon…" />;
   if (result.isError) return <ErrorState message={toUserMessage(result.error)} onRetry={() => void result.refetch()} />;
   if (!result.data) {
-    return <EmptyState title="That Pokémon doesn’t exist." hint="The Kanto Pokédex covers numbers 1–151." />;
+    return <NotFound dexId={raw} />;
   }
 
   const p = result.data;
@@ -71,8 +78,8 @@ export function DetailPage() {
           )}
         </div>
         <div className="space-y-2 text-center sm:text-left">
-          <p className="font-mono text-sm text-ink-500">#{dex}</p>
-          <h1 className="text-3xl font-bold text-ink-900">{p.display_name}</h1>
+          <p className="font-display text-sm text-ink-500">№{dex}</p>
+          <h1 className="font-display text-2xl leading-tight text-ink-900 sm:text-3xl">{p.display_name}</h1>
           <div className="flex flex-wrap justify-center gap-1 sm:justify-start">
             {p.types.map((t) => (
               <TypeBadge key={t} type={t} />
@@ -90,6 +97,24 @@ export function DetailPage() {
           </dl>
         </div>
       </header>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex items-center gap-2">
+          <FavStar
+            active={isFavorite(p.national_dex_number)}
+            onToggle={() => toggle(p.national_dex_number)}
+            name={p.display_name}
+          />
+          <span className="text-sm text-ink-700">
+            {isFavorite(p.national_dex_number) ? 'In favorites' : 'Add to favorites'}
+          </span>
+        </div>
+        <Button asChild variant="secondary" size="sm">
+          <Link to="/compare" search={{ a: p.national_dex_number, b: undefined }}>
+            Compare
+          </Link>
+        </Button>
+      </div>
 
       {p.flavor_text && (
         <Card>

@@ -16,6 +16,8 @@ import { AuthCallback } from '@/features/auth/AuthCallback';
 import { PokedexPage } from '@/features/pokedex/PokedexPage';
 import { DetailPage } from '@/features/pokemon-detail/DetailPage';
 import { MapPage } from '@/features/kanto-map/MapPage';
+import { FavoritesPage } from '@/features/favorites/FavoritesPage';
+import { ComparePage } from '@/features/compare/ComparePage';
 
 export interface RouterContext {
   queryClient: QueryClient;
@@ -24,7 +26,7 @@ export interface RouterContext {
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: RootLayout,
-  notFoundComponent: NotFound,
+  notFoundComponent: () => <NotFound />,
 });
 
 const indexRoute = createRoute({ getParentRoute: () => rootRoute, path: '/', component: LandingPage });
@@ -71,11 +73,28 @@ const mapRoute = createRoute({
   validateSearch: (search: Record<string, unknown>) => mapSearchSchema.parse(search),
 });
 
+const favoritesRoute = createRoute({
+  getParentRoute: () => protectedRoute,
+  path: '/favorites',
+  component: FavoritesPage,
+});
+
+const compareSearchSchema = z.object({
+  a: z.coerce.number().int().min(1).max(151).optional().catch(undefined),
+  b: z.coerce.number().int().min(1).max(151).optional().catch(undefined),
+});
+const compareRoute = createRoute({
+  getParentRoute: () => protectedRoute,
+  path: '/compare',
+  component: ComparePage,
+  validateSearch: (search: Record<string, unknown>) => compareSearchSchema.parse(search),
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   authRoute,
   authCallbackRoute,
-  protectedRoute.addChildren([pokedexRoute, detailRoute, mapRoute]),
+  protectedRoute.addChildren([pokedexRoute, detailRoute, mapRoute, favoritesRoute, compareRoute]),
 ]);
 
 export function createAppRouter(context: RouterContext) {
@@ -83,7 +102,7 @@ export function createAppRouter(context: RouterContext) {
     routeTree,
     context,
     defaultPreload: 'intent',
-    defaultNotFoundComponent: NotFound,
+    defaultNotFoundComponent: () => <NotFound />,
   });
 }
 
