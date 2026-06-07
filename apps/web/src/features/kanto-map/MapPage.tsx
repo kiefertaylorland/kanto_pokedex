@@ -50,7 +50,7 @@ export function MapPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold text-ink-900">Kanto Map</h1>
+      <h1 className="font-display text-2xl text-ink-900">Kanto Map</h1>
       <p className="text-sm text-ink-500">Tap a marker to see which Pokémon appear there.</p>
 
       <div className="mx-auto max-w-3xl">
