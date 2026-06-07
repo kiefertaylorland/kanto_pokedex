@@ -36,3 +36,8 @@ test-results/
 ## Supabase local
 supabase/.branches/
 supabase/.temp/
+
+## Skills
+.claude/
+.claude/skills/
+.specify/
