@@ -88,12 +88,10 @@ beforeEach(() => {
 
   vi.mocked(fetchPokemonDetail).mockResolvedValue(PIKACHU);
   localStorage.clear();
-  window.dispatchEvent(new StorageEvent('storage', { key: SOUND_STORAGE_KEY }));
 });
 afterEach(() => {
   vi.unstubAllGlobals();
   localStorage.clear();
-  window.dispatchEvent(new StorageEvent('storage', { key: SOUND_STORAGE_KEY }));
 });
 
 describe('DetailPage cry playback', () => {
@@ -112,7 +110,6 @@ describe('DetailPage cry playback', () => {
 
   it('does NOT auto-play when sound is off', async () => {
     localStorage.setItem(SOUND_STORAGE_KEY, 'false');
-    window.dispatchEvent(new StorageEvent('storage', { key: SOUND_STORAGE_KEY }));
 
     renderDetail();
     await screen.findByRole('heading', { name: 'Pikachu' });
