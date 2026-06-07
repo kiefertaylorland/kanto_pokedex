@@ -9,7 +9,9 @@ const MARKER_FILL: Record<string, string> = {
   special: '#7c3aed',
 };
 
-const LABEL_OFFSETS: Record<string, { x: number; y: number; anchor: 'start' | 'middle' | 'end' }> = {
+type LabelOffset = { x: number; y: number; anchor: 'start' | 'middle' | 'end' };
+
+const LABEL_OFFSETS: Record<string, LabelOffset> = {
   'pallet-town': { x: -3.6, y: -4.1, anchor: 'end' },
   'route-1': { x: -3.8, y: 1.1, anchor: 'end' },
   'viridian-city': { x: -3.8, y: 4.5, anchor: 'end' },
@@ -28,6 +30,14 @@ const LABEL_OFFSETS: Record<string, { x: number; y: number; anchor: 'start' | 'm
   'victory-road': { x: 3.6, y: 3.8, anchor: 'start' },
   'indigo-plateau': { x: 3.6, y: -3.8, anchor: 'start' },
 };
+
+const ROUTE_PATHS = [
+  'M20 90 V54 H32 L46 48 V76',
+  'M34 62 H62 V52',
+  'M46 62 H62',
+  'M44 90 L36 95 L20 96',
+  'M8 52 L6 46',
+];
 
 /**
  * Retro-inspired Kanto map drawn entirely in code (no external asset — FR-027).
@@ -76,16 +86,12 @@ export function KantoMapSvg({
         opacity="0.45"
       />
       <g aria-hidden="true" data-testid="kanto-map-routes" fill="none" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20 90 V54 H32 L46 48 V76" stroke="#f8e7a1" strokeWidth="3.6" />
-        <path d="M34 62 H62 V52" stroke="#f8e7a1" strokeWidth="3.6" />
-        <path d="M46 62 H62" stroke="#f8e7a1" strokeWidth="3.6" />
-        <path d="M44 90 L36 95 L20 96" stroke="#f8e7a1" strokeWidth="3.6" />
-        <path d="M8 52 L6 46" stroke="#f8e7a1" strokeWidth="3.6" />
-        <path d="M20 90 V54 H32 L46 48 V76" stroke="#caa85a" strokeWidth="0.55" strokeDasharray="1.2 1.2" />
-        <path d="M34 62 H62 V52" stroke="#caa85a" strokeWidth="0.55" strokeDasharray="1.2 1.2" />
-        <path d="M46 62 H62" stroke="#caa85a" strokeWidth="0.55" strokeDasharray="1.2 1.2" />
-        <path d="M44 90 L36 95 L20 96" stroke="#caa85a" strokeWidth="0.55" strokeDasharray="1.2 1.2" />
-        <path d="M8 52 L6 46" stroke="#caa85a" strokeWidth="0.55" strokeDasharray="1.2 1.2" />
+        {ROUTE_PATHS.map((path) => (
+          <path key={`base-${path}`} d={path} stroke="#f8e7a1" strokeWidth="3.6" />
+        ))}
+        {ROUTE_PATHS.map((path) => (
+          <path key={`dash-${path}`} d={path} stroke="#caa85a" strokeWidth="0.55" strokeDasharray="1.2 1.2" />
+        ))}
       </g>
       <g aria-hidden="true" opacity="0.85">
         <path d="M14 64 h12 v6 h-12z M16 72 h8 v5 h-8z" fill="#75c878" />
