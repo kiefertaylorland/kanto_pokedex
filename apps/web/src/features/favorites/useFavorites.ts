@@ -42,7 +42,7 @@ function write(next: number[]): void {
 function subscribe(listener: () => void): () => void {
   listeners.add(listener);
   const onStorage = (e: StorageEvent) => {
-    if (e.key === STORAGE_KEY) {
+    if (e.key === STORAGE_KEY || e.key === null) {
       cache = null; // invalidate; next snapshot re-reads from storage
       listener();
     }
