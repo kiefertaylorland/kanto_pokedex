@@ -11,6 +11,8 @@ const MARKER_FILL: Record<string, string> = {
 
 type LabelOffset = { x: number; y: number; anchor: 'start' | 'middle' | 'end' };
 
+const DEFAULT_LABEL_OFFSET: LabelOffset = { x: 0, y: -3.4, anchor: 'middle' };
+
 const LABEL_OFFSETS: Record<string, LabelOffset> = {
   'pallet-town': { x: -3.6, y: -4.1, anchor: 'end' },
   'route-1': { x: -3.8, y: 1.1, anchor: 'end' },
@@ -38,6 +40,9 @@ const ROUTE_PATHS = [
   'M44 90 L36 95 L20 96',
   'M8 52 L6 46',
 ];
+
+const ROUTE_BASE_COLOR = '#f8e7a1';
+const ROUTE_DASH_COLOR = '#caa85a';
 
 /**
  * Retro-inspired Kanto map drawn entirely in code (no external asset — FR-027).
@@ -87,10 +92,10 @@ export function KantoMapSvg({
       />
       <g aria-hidden="true" data-testid="kanto-map-routes" fill="none" strokeLinecap="round" strokeLinejoin="round">
         {ROUTE_PATHS.map((path) => (
-          <path key={`base-${path}`} d={path} stroke="#f8e7a1" strokeWidth="3.6" />
+          <path key={`base-${path}`} d={path} stroke={ROUTE_BASE_COLOR} strokeWidth="3.6" />
         ))}
         {ROUTE_PATHS.map((path) => (
-          <path key={`dash-${path}`} d={path} stroke="#caa85a" strokeWidth="0.55" strokeDasharray="1.2 1.2" />
+          <path key={`dash-${path}`} d={path} stroke={ROUTE_DASH_COLOR} strokeWidth="0.55" strokeDasharray="1.2 1.2" />
         ))}
       </g>
       <g aria-hidden="true" opacity="0.85">
@@ -105,7 +110,7 @@ export function KantoMapSvg({
       {locations.map(({ location, point, encounters }) => {
         const selected = selectedId === location.id;
         const fill = MARKER_FILL[point.marker_type] ?? '#555';
-        const label = LABEL_OFFSETS[location.slug] ?? { x: 0, y: -3.4, anchor: 'middle' as const };
+        const label = LABEL_OFFSETS[location.slug] ?? DEFAULT_LABEL_OFFSET;
         return (
           <g key={location.id} transform={`translate(${point.x} ${point.y})`}>
             <a
