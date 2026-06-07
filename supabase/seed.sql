@@ -23,25 +23,29 @@ insert into public.kanto_locations (slug, display_name, location_type, descripti
 on conflict (slug) do nothing;
 
 insert into public.kanto_map_points (kanto_location_id, x, y, label_anchor, marker_type)
-select kl.id, v.x, v.y, 'top', v.marker_type
+select kl.id, v.x, v.y, v.label_anchor, v.marker_type
 from (values
-  ('pallet-town',     20::numeric, 90::numeric, 'city'),
-  ('route-1',         20::numeric, 82::numeric, 'route'),
-  ('viridian-city',   20::numeric, 74::numeric, 'city'),
-  ('viridian-forest', 20::numeric, 64::numeric, 'forest'),
-  ('pewter-city',     20::numeric, 54::numeric, 'city'),
-  ('mt-moon',         32::numeric, 50::numeric, 'cave'),
-  ('cerulean-city',   46::numeric, 48::numeric, 'city'),
-  ('power-plant',     58::numeric, 52::numeric, 'special'),
-  ('saffron-city',    46::numeric, 62::numeric, 'city'),
-  ('vermilion-city',  46::numeric, 76::numeric, 'city'),
-  ('lavender-town',   62::numeric, 62::numeric, 'special'),
-  ('celadon-city',    34::numeric, 62::numeric, 'city'),
-  ('fuchsia-city',    44::numeric, 90::numeric, 'city'),
-  ('seafoam-islands', 36::numeric, 95::numeric, 'cave'),
-  ('cinnabar-island', 20::numeric, 96::numeric, 'water'),
-  ('victory-road',    8::numeric,  52::numeric, 'cave'),
-  ('indigo-plateau',  6::numeric,  46::numeric, 'special')
-) as v(slug, x, y, marker_type)
+  ('pallet-town',     20::numeric, 90::numeric, 'top',          'city'),
+  ('route-1',         20::numeric, 82::numeric, 'right',        'route'),
+  ('viridian-city',   20::numeric, 74::numeric, 'bottom',       'city'),
+  ('viridian-forest', 20::numeric, 64::numeric, 'right',        'forest'),
+  ('pewter-city',     20::numeric, 54::numeric, 'right',        'city'),
+  ('mt-moon',         32::numeric, 50::numeric, 'top',          'cave'),
+  ('cerulean-city',   46::numeric, 48::numeric, 'top',          'city'),
+  ('power-plant',     58::numeric, 52::numeric, 'right',        'special'),
+  ('saffron-city',    46::numeric, 62::numeric, 'bottom',       'city'),
+  ('vermilion-city',  46::numeric, 76::numeric, 'bottom',       'city'),
+  ('lavender-town',   62::numeric, 62::numeric, 'top-right',    'special'),
+  ('celadon-city',    34::numeric, 62::numeric, 'left',         'city'),
+  ('fuchsia-city',    44::numeric, 90::numeric, 'top-right',    'city'),
+  ('seafoam-islands', 36::numeric, 95::numeric, 'top-right',    'cave'),
+  ('cinnabar-island', 20::numeric, 96::numeric, 'top-right',    'water'),
+  ('victory-road',    8::numeric,  52::numeric, 'bottom-right', 'cave'),
+  ('indigo-plateau',  6::numeric,  46::numeric, 'bottom-right', 'special')
+) as v(slug, x, y, label_anchor, marker_type)
 join public.kanto_locations kl on kl.slug = v.slug
-on conflict (kanto_location_id) do nothing;
+on conflict (kanto_location_id) do update
+set x = excluded.x,
+    y = excluded.y,
+    label_anchor = excluded.label_anchor,
+    marker_type = excluded.marker_type;

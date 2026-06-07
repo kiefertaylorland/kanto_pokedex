@@ -29,6 +29,27 @@ const SHAPE_LABEL: Record<string, string> = {
   special: 'Special — star',
 };
 
+type LabelAnchor = 'top' | 'right' | 'bottom' | 'left' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+
+const LABEL_ANCHORS: Record<
+  LabelAnchor,
+  { x: number; y: number; textAnchor: 'start' | 'middle' | 'end' }
+> = {
+  top: { x: 0, y: -4.6, textAnchor: 'middle' },
+  right: { x: 3.4, y: 0, textAnchor: 'start' },
+  bottom: { x: 0, y: 4.6, textAnchor: 'middle' },
+  left: { x: -3.4, y: 0, textAnchor: 'end' },
+  'top-left': { x: -3.2, y: -3.8, textAnchor: 'end' },
+  'top-right': { x: 3.2, y: -3.8, textAnchor: 'start' },
+  'bottom-left': { x: -3.2, y: 3.8, textAnchor: 'end' },
+  'bottom-right': { x: 3.2, y: 3.8, textAnchor: 'start' },
+};
+
+/** Maps database label anchors to SVG text placement, defaulting to top for null/unknown values. */
+function labelProps(anchor: string | null) {
+  return LABEL_ANCHORS[(anchor ?? 'top') as LabelAnchor] ?? LABEL_ANCHORS.top;
+}
+
 /** Five-point star polygon points, centered on the origin and scaled by `s`. */
 function starPoints(s: number): string {
   const pts: string[] = [];
@@ -99,6 +120,7 @@ export function KantoMapSvg({
 
         {locations.map(({ location, point, encounters }) => {
           const selected = selectedId === location.id;
+          const label = labelProps(point.label_anchor);
           return (
             <g key={location.id} transform={`translate(${point.x} ${point.y})`}>
               <a
@@ -115,7 +137,18 @@ export function KantoMapSvg({
                 className="cursor-pointer"
               >
                 <MarkerShape markerType={point.marker_type} selected={selected} />
-                <text x="0" y="-3" textAnchor="middle" fontSize="2.6" fill="#1A1B17" className="select-none">
+                <text
+                  x={label.x}
+                  y={label.y}
+                  textAnchor={label.textAnchor}
+                  dominantBaseline="middle"
+                  fontSize="2.2"
+                  fill="#1A1B17"
+                  stroke="#F7F8F0"
+                  strokeWidth="0.45"
+                  paintOrder="stroke"
+                  className="select-none"
+                >
                   {location.display_name}
                 </text>
               </a>

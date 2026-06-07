@@ -52,7 +52,7 @@ const locations: MapLocationEncounters[] = [
       kanto_location_id: 'loc-route-1',
       x: 20,
       y: 82,
-      label_anchor: 'top',
+      label_anchor: 'right',
       marker_type: 'route',
     },
     encounters: [],
@@ -61,12 +61,13 @@ const locations: MapLocationEncounters[] = [
 
 describe('KantoMapSvg', () => {
   it('renders a layered Kanto-style map with accessible location markers', () => {
-    render(<KantoMapSvg locations={locations} selectedId={null} onSelect={vi.fn()} />);
+    const { container } = render(<KantoMapSvg locations={locations} selectedId={null} onSelect={vi.fn()} />);
 
     expect(screen.getByRole('img', { name: /map of the kanto region/i })).toBeInTheDocument();
     expect(screen.getByTestId('kanto-landmass')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Pallet Town, 1 encounter' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Route 1, 0 encounters' })).toBeInTheDocument();
+    expect(container.querySelector('text[x="3.4"]')).toHaveTextContent('Route 1');
   });
 
   it('keeps marker selection mouse and keyboard accessible', async () => {
