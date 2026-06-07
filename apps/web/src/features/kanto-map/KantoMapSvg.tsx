@@ -45,6 +45,7 @@ const LABEL_ANCHORS: Record<
   'bottom-right': { x: 3.2, y: 3.8, textAnchor: 'start' },
 };
 
+/** Maps database label anchors to SVG text placement, defaulting to top for null/unknown values. */
 function labelProps(anchor: string | null) {
   return LABEL_ANCHORS[(anchor ?? 'top') as LabelAnchor] ?? LABEL_ANCHORS.top;
 }
