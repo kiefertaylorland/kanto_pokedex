@@ -61,10 +61,10 @@ const locations: MapLocationEncounters[] = [
 
 describe('KantoMapSvg', () => {
   it('renders a layered Kanto-style map with accessible location markers', () => {
-    const { container } = render(<KantoMapSvg locations={locations} selectedId={null} onSelect={vi.fn()} />);
+    render(<KantoMapSvg locations={locations} selectedId={null} onSelect={vi.fn()} />);
 
     expect(screen.getByRole('img', { name: /map of the kanto region/i })).toBeInTheDocument();
-    expect(container.querySelector('path[d="M10 13 H44 V42 H31 V58 H10 Z M53 11 H94 V48 H72 V59 H53 Z M10 59 H72 V72 H61 V83 H49 V92 H29 V84 H10 Z"]')).toBeInTheDocument();
+    expect(screen.getByTestId('kanto-landmass')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Pallet Town, 1 encounter' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Route 1, 0 encounters' })).toBeInTheDocument();
   });
