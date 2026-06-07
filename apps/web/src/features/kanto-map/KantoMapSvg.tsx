@@ -43,6 +43,9 @@ const ROUTE_PATHS = [
 
 const ROUTE_BASE_COLOR = '#f8e7a1';
 const ROUTE_DASH_COLOR = '#caa85a';
+const MARKER_RADIUS_DEFAULT = 1.8;
+const MARKER_RADIUS_SELECTED = 2.4;
+const LABEL_FONT_SIZE = 2.15;
 
 /**
  * Retro-inspired Kanto map drawn entirely in code (no external asset — FR-027).
@@ -90,7 +93,7 @@ export function KantoMapSvg({
         fill="#d9f4c2"
         opacity="0.45"
       />
-      <g aria-hidden="true" data-testid="kanto-map-routes" fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <g aria-hidden="true" fill="none" strokeLinecap="round" strokeLinejoin="round">
         {ROUTE_PATHS.map((path) => (
           <path key={`base-${path}`} d={path} stroke={ROUTE_BASE_COLOR} strokeWidth="3.6" />
         ))}
@@ -128,7 +131,7 @@ export function KantoMapSvg({
             >
               {selected && <circle r="3.8" fill={fill} opacity="0.25" />}
               <circle
-                r={selected ? 2.4 : 1.8}
+                r={selected ? MARKER_RADIUS_SELECTED : MARKER_RADIUS_DEFAULT}
                 fill={fill}
                 stroke="#fff"
                 strokeWidth="0.6"
@@ -139,7 +142,7 @@ export function KantoMapSvg({
                 x={label.x}
                 y={label.y}
                 textAnchor={label.anchor}
-                fontSize="2.15"
+                fontSize={LABEL_FONT_SIZE}
                 fontWeight="700"
                 fill="#182018"
                 stroke="#f8fff1"
