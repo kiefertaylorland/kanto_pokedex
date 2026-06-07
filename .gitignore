@@ -4,7 +4,35 @@
 docs/
 
 ## Spec Plans
-Plans/ 
+Plans/
 
 ## DS_Store
 .DS_Store
+
+## Dependencies
+node_modules/
+.pnpm-store/
+
+## Build output
+dist/
+build/
+*.tsbuildinfo
+
+## Env / secrets
+.env
+.env.*
+!.env.example
+
+## Test / coverage
+coverage/
+playwright-report/
+test-results/
+.vitest/
+
+## Editor / OS
+.idea/
+*.log
+
+## Supabase local
+supabase/.branches/
+supabase/.temp/

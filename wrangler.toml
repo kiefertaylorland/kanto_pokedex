@@ -1,0 +1,8 @@
+# Cloudflare Pages configuration. The SPA is built to apps/web/dist; Pages
+# Functions are auto-discovered from the repo-root functions/ directory
+# (/api/* → functions/api/*). Production deploys from main; every PR gets a
+# preview deploy (configured in the Pages project / GitHub Actions).
+
+name = "kanto-pokedex"
+compatibility_date = "2024-10-01"
+pages_build_output_dir = "apps/web/dist"

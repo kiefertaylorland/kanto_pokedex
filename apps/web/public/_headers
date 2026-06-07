@@ -1,0 +1,18 @@
+# Cloudflare Pages security headers (SEC-010 / SEC-011).
+# The deploy smoke test asserts these are present on the served app.
+#
+# CSP notes:
+#  - script-src is strict: 'self' only, NO 'unsafe-inline' / 'unsafe-eval' (SEC-011).
+#  - style-src allows 'unsafe-inline' because Radix/our components set inline
+#    style attributes; this does not weaken script protection.
+#  - connect-src is pinned to Supabase (REST + Realtime) and the Sentry ingest.
+#    The browser never calls PokéAPI directly (sync is server-side).
+#  - img-src allows Supabase + the PokéAPI sprite host (raw.githubusercontent.com).
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://raw.githubusercontent.com https://*.supabase.co; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

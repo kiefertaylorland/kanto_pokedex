@@ -474,7 +474,8 @@ copyable block. Note any assumptions before writing.
 
 I created a new repo on GitHub, synced up locally, and began to setup the project, first creating the AGENTS.md and CLAUDE.md files.
 
-I setup **[GitHub Spec Kit](https://github.com/github/spec-kit)** in the repo and created the project's **`constitution.md`**, **`spec.md`**, and **`plan.md`** using the provided prompts from Claude Cowork.
-
 I also had to get GitHub, Cloudflare, and Supabase setup together and installed the necessary CLI tools and MCP servers.
 
+Last part of setup included installing **[GitHub Spec Kit](https://github.com/github/spec-kit)** in the repo and creating the project's **`constitution.md`**, **`spec.md`**, and **`plan.md`** using the provided prompts from Claude Cowork and running 3 rounds of `/speckit-clarify` to clear up the last remaining ambiguities before implementation.
+
+---
