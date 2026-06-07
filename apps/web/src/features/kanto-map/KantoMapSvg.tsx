@@ -1,4 +1,5 @@
 import { type MapLocationEncounters } from '@kanto/shared';
+import { useId } from 'react';
 
 const MARKER_FILL: Record<string, string> = {
   city: '#e11d48',
@@ -94,6 +95,8 @@ export function KantoMapSvg({
   selectedId: string | null;
   onSelect: (locationId: string) => void;
 }) {
+  const waterPatternId = useId();
+
   return (
     <svg
       viewBox="0 0 100 100"
@@ -104,12 +107,12 @@ export function KantoMapSvg({
     >
       {/* Stylized landmass / water backdrop */}
       <defs>
-        <pattern id="kanto-water" width="8" height="8" patternUnits="userSpaceOnUse">
+        <pattern id={waterPatternId} width="8" height="8" patternUnits="userSpaceOnUse">
           <rect width="8" height="8" fill="#8fd3f4" />
           <path d="M0 5 Q2 3.8 4 5 T8 5" fill="none" stroke="#5bb7e4" strokeWidth="0.35" opacity="0.45" />
         </pattern>
       </defs>
-      <rect x="0" y="0" width="100" height="100" fill="url(#kanto-water)" />
+      <rect x="0" y="0" width="100" height="100" fill={`url(#${waterPatternId})`} />
       <path
         d={LANDMASS_PATH}
         fill="#b8e4a8"
