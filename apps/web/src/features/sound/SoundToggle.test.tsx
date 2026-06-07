@@ -6,7 +6,6 @@ import { SOUND_STORAGE_KEY } from './useSoundPreference';
 
 function resetSound() {
   localStorage.clear();
-  window.dispatchEvent(new StorageEvent('storage', { key: SOUND_STORAGE_KEY }));
 }
 
 describe('SoundToggle', () => {
@@ -35,7 +34,6 @@ describe('SoundToggle', () => {
 
   it('reflects a persisted "off" preference', () => {
     localStorage.setItem(SOUND_STORAGE_KEY, 'false');
-    window.dispatchEvent(new StorageEvent('storage', { key: SOUND_STORAGE_KEY }));
     render(<SoundToggle />);
     expect(screen.getByRole('button', { name: /turn cry sound on/i })).toHaveAttribute(
       'aria-pressed',
