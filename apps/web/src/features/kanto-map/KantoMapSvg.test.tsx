@@ -81,12 +81,15 @@ describe('KantoMapSvg', () => {
 
     const beforeMap = screen.getByRole('button', { name: 'Before map' });
     const palletTown = screen.getByRole('button', { name: 'Pallet Town, 1 encounter' });
+    const routeOne = screen.getByRole('button', { name: 'Route 1, 0 encounters' });
     beforeMap.focus();
     expect(beforeMap).toHaveFocus();
     await user.tab();
     expect(palletTown).toHaveFocus();
     await user.keyboard('{Enter}');
     expect(onSelect).toHaveBeenCalledWith('loc-pallet');
+    await user.tab();
+    expect(routeOne).toHaveFocus();
 
     await user.click(palletTown);
     expect(onSelect).toHaveBeenCalledWith('loc-pallet');
