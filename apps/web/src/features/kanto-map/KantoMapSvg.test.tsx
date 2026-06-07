@@ -67,7 +67,7 @@ describe('KantoMapSvg', () => {
     expect(screen.getByTestId('kanto-landmass')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Pallet Town, 1 encounter' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Route 1, 0 encounters' })).toBeInTheDocument();
-    expect(container.querySelector('text[text-anchor="start"]')).toHaveTextContent('Route 1');
+    expect(container.querySelector('text[x="3.4"]')).toHaveTextContent('Route 1');
   });
 
   it('keeps marker selection mouse and keyboard accessible', async () => {
