@@ -231,15 +231,22 @@ Deno.serve(async (req: Request) => {
   }
 });
 
+// Rows can carry large raw_payload JSON, so writes are chunked: a single
+// 151-row upsert produces a request/statement big enough to exceed hosted
+// edge-function memory and the role statement_timeout. Smaller batches keep
+// each round-trip fast and bounded.
+const WRITE_CHUNK = 25;
 async function upsert(db: SupabaseClient, table: string, rows: Record<string, unknown>[]): Promise<void> {
-  if (rows.length === 0) return;
-  const { error } = await db.from(table).upsert(rows);
-  if (error) throw new Error(`${table} upsert: ${error.message}`);
+  for (let i = 0; i < rows.length; i += WRITE_CHUNK) {
+    const { error } = await db.from(table).upsert(rows.slice(i, i + WRITE_CHUNK));
+    if (error) throw new Error(`${table} upsert: ${error.message}`);
+  }
 }
 async function insert(db: SupabaseClient, table: string, rows: Record<string, unknown>[]): Promise<void> {
-  if (rows.length === 0) return;
-  const { error } = await db.from(table).insert(rows);
-  if (error) throw new Error(`${table} insert: ${error.message}`);
+  for (let i = 0; i < rows.length; i += WRITE_CHUNK) {
+    const { error } = await db.from(table).insert(rows.slice(i, i + WRITE_CHUNK));
+    if (error) throw new Error(`${table} insert: ${error.message}`);
+  }
 }
 
 function json(body: unknown, status: number): Response {

@@ -334,6 +334,25 @@ skip_nonce_check = false
 # If enabled, it will allow the user to successfully authenticate when the provider does not return an email address.
 email_optional = false
 
+# --- Production auth config (documented; live toggle is the hosted Supabase Dashboard) ---
+# The hosted project (ref wdptkswyfujtzkftzjsm) enables Google + GitHub OAuth and email magic
+# link. These blocks govern the LOCAL stack only — for the hosted project, set the same providers
+# under Dashboard ▸ Authentication ▸ Providers, each with the provider callback
+# https://wdptkswyfujtzkftzjsm.supabase.co/auth/v1/callback , and under URL Configuration set
+# Site URL https://kantopokedex.pages.dev + additional redirect https://kantopokedex.pages.dev/auth/callback .
+# To exercise OAuth locally, fill the secrets via env vars and flip enabled = true:
+# [auth.external.google]
+# enabled = false
+# client_id = ""
+# secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+# redirect_uri = ""
+# skip_nonce_check = true   # required for local Google sign-in
+# [auth.external.github]
+# enabled = false
+# client_id = ""
+# secret = "env(SUPABASE_AUTH_EXTERNAL_GITHUB_SECRET)"
+# redirect_uri = ""
+
 # Allow Solana wallet holders to sign in to your project via the Sign in with Solana (SIWS, EIP-4361) standard.
 # You can configure "web3" rate limit in the [auth.rate_limit] section and set up [auth.captcha] if self-hosting.
 [auth.web3.solana]

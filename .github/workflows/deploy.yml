@@ -37,6 +37,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy apps/web/dist --project-name=kanto-pokedex --branch=main
+          command: pages deploy apps/web/dist --project-name=kantopokedex --branch=main
       - name: Post-deploy header smoke (SEC-011)
         run: node scripts/check-headers.mjs "${{ vars.PROD_URL }}"
