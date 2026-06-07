@@ -72,10 +72,17 @@ describe('KantoMapSvg', () => {
   it('keeps marker selection mouse and keyboard accessible', async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    render(<KantoMapSvg locations={locations} selectedId="loc-pallet" onSelect={onSelect} />);
+    render(
+      <>
+        <button type="button">Before map</button>
+        <KantoMapSvg locations={locations} selectedId="loc-pallet" onSelect={onSelect} />
+      </>,
+    );
 
+    const beforeMap = screen.getByRole('button', { name: 'Before map' });
     const palletTown = screen.getByRole('button', { name: 'Pallet Town, 1 encounter' });
-    expect(document.body).toHaveFocus();
+    beforeMap.focus();
+    expect(beforeMap).toHaveFocus();
     await user.tab();
     expect(palletTown).toHaveFocus();
     await user.keyboard('{Enter}');
