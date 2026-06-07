@@ -94,7 +94,7 @@ export function KantoMapSvg({
         {/* Stylized landmass / water backdrop */}
         <rect x="0" y="0" width="100" height="100" fill="#bfe3c0" />
         <rect x="0" y="62" width="100" height="38" fill="#9ec9e8" />
-        <path d="M6 8 H44 V40 H30 V58 H6 Z" fill="#a9d9a0" stroke="#7bb874" strokeWidth="0.5" />
+        <path data-testid="kanto-landmass" d="M6 8 H44 V40 H30 V58 H6 Z" fill="#a9d9a0" stroke="#7bb874" strokeWidth="0.5" />
         <path d="M52 6 H94 V46 H70 V60 H52 Z" fill="#a9d9a0" stroke="#7bb874" strokeWidth="0.5" />
 
         {locations.map(({ location, point, encounters }) => {
