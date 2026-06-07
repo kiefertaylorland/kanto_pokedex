@@ -102,9 +102,13 @@ export function KantoMapSvg({
         ))}
       </g>
       <g aria-hidden="true" opacity="0.85">
+        {/* Viridian Forest canopy blocks */}
         <path d="M14 64 h12 v6 h-12z M16 72 h8 v5 h-8z" fill="#75c878" />
+        {/* Mt. Moon ridge and cave entrance */}
         <path d="M30 47 l2 -4 l2 4z M31 47 h6 l2 -4 l2 4 h4 v5 h-14z" fill="#a48a70" />
+        {/* Power Plant structure */}
         <path d="M54 50 h8 v5 h-8z M58 46 h5 v4 h-5z" fill="#d9c68f" />
+        {/* Northeast islands */}
         <circle cx="91" cy="17" r="1.3" fill="#65b96d" />
         <circle cx="87" cy="21" r="1.1" fill="#65b96d" />
         <circle cx="92" cy="25" r="1.2" fill="#65b96d" />
