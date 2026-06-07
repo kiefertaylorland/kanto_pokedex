@@ -93,9 +93,6 @@ export function KantoMapSvg({
           <rect width="8" height="8" fill="#8fd3f4" />
           <path d="M0 5 Q2 3.8 4 5 T8 5" fill="none" stroke="#5bb7e4" strokeWidth="0.35" opacity="0.45" />
         </pattern>
-        <filter id="kanto-marker-shadow" x="-60%" y="-60%" width="220%" height="220%">
-          <feDropShadow dx="0" dy="0.45" stdDeviation="0.45" floodOpacity="0.35" />
-        </filter>
       </defs>
       <rect x="0" y="0" width="100" height="100" fill="url(#kanto-water)" />
       <path
@@ -112,10 +109,10 @@ export function KantoMapSvg({
       />
       <g aria-hidden="true" fill="none" strokeLinecap="round" strokeLinejoin="round">
         {ROUTE_PATHS.map((path) => (
-          <path key={`base-${path}`} d={path} stroke={ROUTE_BASE_COLOR} strokeWidth="3.6" />
-        ))}
-        {ROUTE_PATHS.map((path) => (
-          <path key={`dash-${path}`} d={path} stroke={ROUTE_DASH_COLOR} strokeWidth="0.55" strokeDasharray="1.2 1.2" />
+          <g key={path}>
+            <path d={path} stroke={ROUTE_BASE_COLOR} strokeWidth="3.6" />
+            <path d={path} stroke={ROUTE_DASH_COLOR} strokeWidth="0.55" strokeDasharray="1.2 1.2" />
+          </g>
         ))}
       </g>
       <g aria-hidden="true" opacity="0.85">
@@ -152,7 +149,6 @@ export function KantoMapSvg({
                 fill={fill}
                 stroke="#fff"
                 strokeWidth="0.6"
-                filter="url(#kanto-marker-shadow)"
                 className="transition-all"
               />
               <text

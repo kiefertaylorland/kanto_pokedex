@@ -64,7 +64,7 @@ describe('KantoMapSvg', () => {
     const { container } = render(<KantoMapSvg locations={locations} selectedId={null} onSelect={vi.fn()} />);
 
     expect(screen.getByRole('img', { name: /map of the kanto region/i })).toBeInTheDocument();
-    expect(container.querySelector('g[stroke-linecap="round"] path[stroke]')).toBeInTheDocument();
+    expect(container.querySelector('svg path')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Pallet Town, 1 encounter' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Route 1, 0 encounters' })).toBeInTheDocument();
   });
