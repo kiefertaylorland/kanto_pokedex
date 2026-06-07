@@ -1,5 +1,7 @@
 # Kanto Pokédex
 
+🔗 **Live app:** [kanto-pokedex.pages.dev](https://kanto-pokedex.pages.dev)
+
 An auth-gated, Generation-I (National Dex 1–151) Pokédex: browse/search/filter/sort all 151
 Pokémon, view detail pages (stats, abilities, evolution, Red/Blue flavor text, encounters), and
 explore a retro Kanto SVG map. Built to conform to `/.specify/memory/constitution.md` v1.0.0
