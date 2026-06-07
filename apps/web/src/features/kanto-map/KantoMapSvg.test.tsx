@@ -75,6 +75,7 @@ describe('KantoMapSvg', () => {
     render(<KantoMapSvg locations={locations} selectedId="loc-pallet" onSelect={onSelect} />);
 
     const palletTown = screen.getByRole('button', { name: 'Pallet Town, 1 encounter' });
+    expect(document.body).toHaveFocus();
     await user.tab();
     expect(palletTown).toHaveFocus();
     await user.keyboard('{Enter}');
