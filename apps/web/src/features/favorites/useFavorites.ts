@@ -44,7 +44,7 @@ function subscribe(listener: () => void): () => void {
   const onStorage = (e: StorageEvent) => {
     if (e.key === STORAGE_KEY) {
       cache = null; // invalidate; next snapshot re-reads from storage
-      listeners.forEach((l) => l());
+      listener();
     }
   };
   window.addEventListener('storage', onStorage);

@@ -37,7 +37,7 @@ export function FavStar({
         size === 'grid' ? 'h-8 w-8' : 'h-[34px] w-[34px]',
         active
           ? 'border-brand-600 bg-brand-300 text-brand-600'
-          : 'border-border-strong bg-surface text-ink-400 hover:bg-surface-2',
+          : 'border-border-strong bg-surface text-ink-500 hover:bg-surface-2',
         className,
       )}
     >
