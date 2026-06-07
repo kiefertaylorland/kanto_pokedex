@@ -105,6 +105,7 @@ export function KantoMapSvg({
       {/* Stylized landmass / water backdrop */}
       <defs>
         <pattern id="kanto-water" width="8" height="8" patternUnits="userSpaceOnUse">
+          <title>Kanto water pattern</title>
           <rect width="8" height="8" fill="#8fd3f4" />
           <path d="M0 5 Q2 3.8 4 5 T8 5" fill="none" stroke="#5bb7e4" strokeWidth="0.35" opacity="0.45" />
         </pattern>
@@ -158,7 +159,7 @@ export function KantoMapSvg({
               }}
               className="cursor-pointer outline-none"
             >
-              {selected && <circle r="3.8" fill={fill} opacity="0.25" />}
+              {selected && <circle r="3.8" fill={fill} opacity="0.25" aria-hidden="true" />}
               <circle
                 r={selected ? MARKER_RADIUS_SELECTED : MARKER_RADIUS_DEFAULT}
                 fill={fill}
