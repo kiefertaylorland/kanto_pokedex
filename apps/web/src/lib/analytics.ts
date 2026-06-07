@@ -12,6 +12,8 @@ export const ANALYTICS_EVENTS = [
   'browser_filtered',
   'detail_viewed',
   'map_marker_opened',
+  'favorites_viewed',
+  'compare_viewed',
 ] as const;
 
 export type AnalyticsEvent = (typeof ANALYTICS_EVENTS)[number];

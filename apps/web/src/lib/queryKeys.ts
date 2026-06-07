@@ -9,6 +9,7 @@ export const queryKeys = {
   pokemon: {
     all: ['pokemon'] as const,
     list: (q: BrowserQuery) => ['pokemon', 'list', q] as const,
+    index: () => ['pokemon', 'index'] as const,
     detail: (dexId: number) => ['pokemon', 'detail', dexId] as const,
   },
   map: {

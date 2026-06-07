@@ -2,13 +2,23 @@ import { Link } from '@tanstack/react-router';
 import { type PokemonCard, TYPE_TINTS } from '@kanto/shared';
 import { Card, CardContent } from '@/components/ui/card';
 import { TypeBadge } from '@/components/TypeBadge';
+import { FavStar } from '@/components/FavStar';
+import { useFavorites } from '@/features/favorites/useFavorites';
 
 /** A single browser grid card (FR-009). Links to the detail page. */
 export function PokemonCardItem({ pokemon }: { pokemon: PokemonCard }) {
   const dex = String(pokemon.national_dex_number).padStart(3, '0');
   const primaryType = pokemon.types[0];
+  const { isFavorite, toggle } = useFavorites();
   return (
-    <Card className="transition-shadow hover:shadow-md">
+    <Card className="relative transition-shadow hover:shadow-md">
+      <FavStar
+        active={isFavorite(pokemon.national_dex_number)}
+        onToggle={() => toggle(pokemon.national_dex_number)}
+        name={pokemon.display_name}
+        size="grid"
+        className="absolute right-2 top-2 z-10"
+      />
       <Link to="/pokemon/$dexId" params={{ dexId: String(pokemon.national_dex_number) }} className="block">
         <CardContent className="flex flex-col items-center gap-2 p-4">
           <span className="self-start font-mono text-xs text-ink-500">#{dex}</span>

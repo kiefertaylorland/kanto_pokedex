@@ -78,6 +78,20 @@ export async function fetchPokemonPage(query: BrowserQuery): Promise<BrowserResu
   return { items: rows.map(toCard), total, page, pageCount };
 }
 
+/**
+ * Lightweight index of all Kanto Pokémon (card projection, ordered by dex) for
+ * the Compare pickers and the Favorites grid. The `pokemon_browser` view holds
+ * the 151 rows; no filter/range applied (well under Postgrest's default cap).
+ */
+export async function fetchPokemonIndex(): Promise<PokemonCard[]> {
+  const { data, error } = await supabase
+    .from('pokemon_browser')
+    .select('*')
+    .order('national_dex_number', { ascending: true });
+  if (error) throw error;
+  return ((data ?? []) as BrowserRow[]).map(toCard);
+}
+
 function toCard(row: BrowserRow): PokemonCard {
   return {
     id: row.id,

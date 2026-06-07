@@ -21,7 +21,7 @@ export function LandingPage() {
   return (
     <div className="flex flex-col items-center gap-10 py-8 text-center">
       <section className="max-w-2xl space-y-4">
-        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">The Kanto Pokédex</h1>
+        <h1 className="font-display text-3xl leading-tight text-ink-900 sm:text-4xl">The Kanto Pokédex</h1>
         <p className="text-lg text-ink-700">
           Browse all 151 original Pokémon — search, filter by type, inspect stats and evolutions, and explore where
           each one appears across the Kanto region.
@@ -39,7 +39,7 @@ export function LandingPage() {
           {PREVIEW.map((p) => (
             <Card key={p.dex} className="overflow-hidden">
               <CardContent className="flex flex-col items-center gap-2 p-4">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-surface-2 font-mono text-xs text-ink-500">
+                <div className="flex h-20 w-20 items-center justify-center rounded-md bg-surface-2 font-mono text-xs text-ink-500">
                   #{p.dex}
                 </div>
                 <span className="text-sm font-medium">{p.name}</span>

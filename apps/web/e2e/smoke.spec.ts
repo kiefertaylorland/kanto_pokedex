@@ -60,10 +60,11 @@ test.describe('Authenticated journey: login → browse → detail → map', () =
     await expect(page.getByRole('heading', { name: /base stats/i })).toBeVisible();
   });
 
-  test('out-of-range detail id shows a not-found state (edge case)', async ({ page }) => {
+  test('out-of-range detail id shows the 404 not-found screen (edge case)', async ({ page }) => {
     await injectSession(page);
     await page.goto('/pokemon/9999');
-    await expect(page.getByText(/doesn’t exist/i)).toBeVisible();
+    await expect(page.getByText(/we don’t have data for №9999 yet/i)).toBeVisible();
+    await expect(page.getByRole('link', { name: /back to pokédex/i })).toBeVisible();
   });
 
   test('map marker opens an encounter panel with provenance (P4, SC-007)', async ({ page }) => {
