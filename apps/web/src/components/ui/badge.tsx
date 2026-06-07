@@ -9,8 +9,8 @@ export function Badge({ className, tone = 'default', ...props }: BadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-        tone === 'default' ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300',
+        'inline-flex items-center rounded-sm px-2.5 py-0.5 text-xs font-medium',
+        tone === 'default' ? 'bg-ink-900 text-surface' : 'bg-surface-3 text-ink-700',
         className,
       )}
       {...props}

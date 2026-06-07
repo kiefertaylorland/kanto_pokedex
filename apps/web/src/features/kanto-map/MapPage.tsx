@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { useSearch, useNavigate, Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { CONFIDENCE_DISPLAY, type MapLocationEncounters } from '@kanto/shared';
+import { type MapLocationEncounters } from '@kanto/shared';
 import { queryKeys } from '@/lib/queryKeys';
 import { toUserMessage } from '@/lib/errors';
 import { track } from '@/lib/analytics';
 import { fetchMapData } from './api';
 import { KantoMapSvg } from './KantoMapSvg';
-import { Badge } from '@/components/ui/badge';
+import { ConfidenceLabel } from '@/components/ConfidenceLabel';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { LoadingState, ErrorState, EmptyState } from '@/components/state';
 
@@ -50,8 +50,8 @@ export function MapPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Kanto Map</h1>
-      <p className="text-sm text-zinc-500">Tap a marker to see which Pokémon appear there.</p>
+      <h1 className="text-2xl font-bold text-ink-900">Kanto Map</h1>
+      <p className="text-sm text-ink-500">Tap a marker to see which Pokémon appear there.</p>
 
       <div className="mx-auto max-w-3xl">
         <KantoMapSvg locations={result.data} selectedId={selectedId} onSelect={setSelected} />
@@ -85,17 +85,17 @@ function LocationPanel({ location }: { location: MapLocationEncounters }) {
               <Link
                 to="/pokemon/$dexId"
                 params={{ dexId: String(e.pokemon.national_dex_number) }}
-                className="flex flex-1 items-center gap-3 rounded p-1 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                className="flex flex-1 items-center gap-3 rounded-sm p-1 hover:bg-surface-2"
               >
                 {e.pokemon.sprite_url ? (
                   <img src={e.pokemon.sprite_url} alt={e.pokemon.display_name} width={40} height={40} className="h-10 w-10 object-contain" loading="lazy" />
                 ) : (
-                  <span className="flex h-10 w-10 items-center justify-center rounded bg-zinc-100 text-[10px] text-zinc-400 dark:bg-zinc-800">N/A</span>
+                  <span className="flex h-10 w-10 items-center justify-center rounded-sm bg-surface-2 text-[10px] text-ink-500">N/A</span>
                 )}
-                <span className="text-sm font-medium">{e.pokemon.display_name}</span>
+                <span className="text-sm font-medium text-ink-900">{e.pokemon.display_name}</span>
               </Link>
-              {e.method && <span className="text-xs text-zinc-500">{e.method}</span>}
-              <Badge tone="muted">{CONFIDENCE_DISPLAY[e.confidence]}</Badge>
+              {e.method && <span className="text-xs text-ink-500">{e.method}</span>}
+              <ConfidenceLabel confidence={e.confidence} />
             </li>
           ))}
         </ul>

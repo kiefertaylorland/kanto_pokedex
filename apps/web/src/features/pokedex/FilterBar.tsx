@@ -31,7 +31,7 @@ export function FilterBar({ query, onChange }: Props) {
   }
 
   return (
-    <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="space-y-4 rounded-md border-2 border-border-strong bg-surface p-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <label htmlFor="search" className="sr-only">
           Search by name or number
@@ -47,14 +47,14 @@ export function FilterBar({ query, onChange }: Props) {
         />
 
         <div className="flex items-center gap-2">
-          <label htmlFor="sort" className="text-sm text-zinc-600 dark:text-zinc-300">
+          <label htmlFor="sort" className="text-sm text-ink-700">
             Sort
           </label>
           <select
             id="sort"
             value={query.sort}
             onChange={(e) => onChange({ sort: e.target.value as SortKey, page: 1 })}
-            className="h-10 rounded-lg border border-zinc-300 bg-white px-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+            className="h-10 rounded-md border border-border-strong bg-surface px-2 text-sm text-ink-900"
           >
             {SORT_KEYS.map((k) => (
               <option key={k} value={k}>
@@ -74,10 +74,10 @@ export function FilterBar({ query, onChange }: Props) {
       </div>
 
       <fieldset>
-        <legend className="mb-2 text-sm font-medium text-zinc-600 dark:text-zinc-300">Filter by type</legend>
+        <legend className="mb-2 text-sm font-medium text-ink-700">Filter by type</legend>
         <div className="flex flex-wrap gap-x-4 gap-y-2">
           {TYPE_NAMES.map((type) => (
-            <label key={type} className="flex cursor-pointer items-center gap-1.5 text-sm">
+            <label key={type} className="flex cursor-pointer items-center gap-1.5 text-sm text-ink-700">
               <Checkbox checked={query.types.includes(type)} onCheckedChange={() => toggleType(type)} />
               {typeDisplayName(type)}
             </label>

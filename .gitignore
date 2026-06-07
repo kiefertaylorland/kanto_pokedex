@@ -41,3 +41,7 @@ supabase/.temp/
 .claude/
 .claude/skills/
 .specify/
+.gstack/
+
+## Design handoff bundle (delivery artifact / input material, not app code)
+design_handoff_kanto_design_system/

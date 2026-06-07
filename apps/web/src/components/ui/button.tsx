@@ -4,17 +4,19 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-semibold transition-[background-color,transform] duration-[120ms] ease-out active:translate-y-px disabled:pointer-events-none disabled:bg-surface-3 disabled:text-ink-400',
   {
     variants: {
       variant: {
-        default: 'bg-pokedex-red text-white hover:bg-pokedex-red/90',
-        outline: 'border border-zinc-300 bg-transparent hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800',
-        ghost: 'hover:bg-zinc-100 dark:hover:bg-zinc-800',
-        secondary: 'bg-zinc-200 text-zinc-900 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-100',
+        default: 'bg-brand-600 text-white hover:bg-brand-700',
+        secondary: 'bg-surface text-ink-900 border border-border-strong hover:bg-surface-2',
+        ghost: 'text-ink-700 hover:bg-surface-3',
+        destructive: 'bg-error text-white hover:brightness-95',
+        outline: 'border border-border-strong bg-transparent text-ink-900 hover:bg-surface-2',
+        link: 'text-info underline-offset-4 hover:underline',
       },
       size: {
-        default: 'h-10 px-4 py-2',
+        default: 'h-10 px-4 text-sm',
         sm: 'h-8 px-3 text-xs',
         lg: 'h-12 px-6 text-base',
         icon: 'h-10 w-10',

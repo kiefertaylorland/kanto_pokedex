@@ -53,14 +53,14 @@ export function AuthPage() {
             </Button>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-zinc-400">
-            <span className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
+          <div className="flex items-center gap-2 text-xs text-ink-500">
+            <span className="h-px flex-1 bg-border" />
             or
-            <span className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
+            <span className="h-px flex-1 bg-border" />
           </div>
 
           {status === 'sent' ? (
-            <p className="text-sm text-zinc-600 dark:text-zinc-300" role="status">
+            <p className="text-sm text-ink-700" role="status">
               Check your email for a sign-in link.
             </p>
           ) : (
@@ -84,7 +84,7 @@ export function AuthPage() {
           )}
 
           {status === 'error' && (
-            <p className="text-sm text-pokedex-red" role="alert">
+            <p className="text-sm text-error" role="alert">
               We couldn’t start sign-in. Please try again.
             </p>
           )}
