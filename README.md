@@ -59,7 +59,7 @@ provisioned against Supabase project `wdptkswyfujtzkftzjsm` and Cloudflare Pages
 
 ### Provisioned (production backend — done)
 
-- **Supabase** — 5 migrations applied, curated Kanto map seeded (17 locations + map points), the
+- **Supabase** — migrations applied, curated Kanto map seeded (17 locations + map points), the
   `sync-pokeapi` Edge Function deployed (`verify_jwt=false`; it does its own `SYNC_SECRET` bearer
   check), one full sync run (151 Pokémon), and 23 curated encounters loaded. A weekly `pg_cron` job
   (`sync-pokeapi-weekly`, Mon 06:00 UTC) triggers the function via Vault-stored `sync_url`/`sync_secret`.
