@@ -1,7 +1,6 @@
 import type { Config } from 'tailwindcss';
 
 export default {
-  darkMode: 'class',
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
@@ -27,7 +26,7 @@ export default {
         'error-soft': '#FBE6E3',
         info: '#1C5FBF',
         'info-soft': '#E4ECF8',
-        // 18 types — DEFAULT = badge (white text), tint = non-text accent
+        // 15 Gen-I types — DEFAULT = badge (white text), tint = non-text accent
         type: {
           normal: { DEFAULT: '#6B6B5E', tint: '#EBEBE6' },
           fire: { DEFAULT: '#C2370F', tint: '#FAD9CF' },
@@ -44,9 +43,6 @@ export default {
           rock: { DEFAULT: '#7A6A3E', tint: '#E7E1D2' },
           ghost: { DEFAULT: '#4E4376', tint: '#DAD5E6' },
           dragon: { DEFAULT: '#4A3FB5', tint: '#D9D6F0' },
-          dark: { DEFAULT: '#3E3A45', tint: '#D7D5DA' },
-          steel: { DEFAULT: '#5A6B7A', tint: '#DCE1E6' },
-          fairy: { DEFAULT: '#B83C7A', tint: '#F5D6E5' },
         },
         confidence: {
           pokeapi: '#1F7A3D',
