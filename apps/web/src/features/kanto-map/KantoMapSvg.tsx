@@ -33,12 +33,17 @@ const LABEL_OFFSETS: Record<string, LabelOffset> = {
   'indigo-plateau': { x: 3.6, y: -3.8, anchor: 'start' },
 };
 
+const LANDMASS_PATH =
+  'M10 13 H44 V42 H31 V58 H10 Z M53 11 H94 V48 H72 V59 H53 Z M10 59 H72 V72 H61 V83 H49 V92 H29 V84 H10 Z';
+const LAND_HIGHLIGHT_PATH =
+  'M13 17 H41 V39 H28 V55 H13 Z M56 15 H91 V45 H69 V56 H56 Z M13 62 H69 V69 H58 V80 H47 V89 H31 V81 H13 Z';
+
 const ROUTE_PATHS = [
-  'M20 90 V54 H32 L46 48 V76',
-  'M34 62 H62 V52',
-  'M46 62 H62',
-  'M44 90 L36 95 L20 96',
-  'M8 52 L6 46',
+  { label: 'Western route spine', path: 'M20 90 V54 H32 L46 48 V76' },
+  { label: 'Celadon to Power Plant route', path: 'M34 62 H62 V52' },
+  { label: 'Saffron to Lavender connector', path: 'M46 62 H62' },
+  { label: 'Southern island ferry route', path: 'M44 90 L36 95 L20 96' },
+  { label: 'Victory Road to Indigo Plateau route', path: 'M8 52 L6 46' },
 ];
 
 const ROUTE_BASE_COLOR = '#f8e7a1';
@@ -46,6 +51,18 @@ const ROUTE_DASH_COLOR = '#caa85a';
 const MARKER_RADIUS_DEFAULT = 1.8;
 const MARKER_RADIUS_SELECTED = 2.4;
 const LABEL_FONT_SIZE = 2.15;
+
+const TERRAIN_DECORATIONS = [
+  { label: 'Viridian Forest canopy blocks', path: 'M14 64 h12 v6 h-12z M16 72 h8 v5 h-8z', fill: '#75c878' },
+  { label: 'Mt. Moon ridge and cave entrance', path: 'M30 47 l2 -4 l2 4z M31 47 h6 l2 -4 l2 4 h4 v5 h-14z', fill: '#a48a70' },
+  { label: 'Power Plant structure', path: 'M54 50 h8 v5 h-8z M58 46 h5 v4 h-5z', fill: '#d9c68f' },
+];
+
+const NORTHEAST_ISLANDS = [
+  { cx: 91, cy: 17, r: 1.3 },
+  { cx: 87, cy: 21, r: 1.1 },
+  { cx: 92, cy: 25, r: 1.2 },
+];
 
 /**
  * Retro-inspired Kanto map drawn entirely in code (no external asset — FR-027).
@@ -82,36 +99,32 @@ export function KantoMapSvg({
       </defs>
       <rect x="0" y="0" width="100" height="100" fill="url(#kanto-water)" />
       <path
-        d="M10 13 H44 V42 H31 V58 H10 Z M53 11 H94 V48 H72 V59 H53 Z M10 59 H72 V72 H61 V83 H49 V92 H29 V84 H10 Z"
+        d={LANDMASS_PATH}
         fill="#b8e4a8"
         stroke="#5fa85d"
         strokeWidth="0.8"
         strokeLinejoin="round"
       />
       <path
-        d="M13 17 H41 V39 H28 V55 H13 Z M56 15 H91 V45 H69 V56 H56 Z M13 62 H69 V69 H58 V80 H47 V89 H31 V81 H13 Z"
+        d={LAND_HIGHLIGHT_PATH}
         fill="#d9f4c2"
         opacity="0.45"
       />
       <g aria-hidden="true" fill="none" strokeLinecap="round" strokeLinejoin="round">
-        {ROUTE_PATHS.map((path) => (
-          <path key={`base-${path}`} d={path} stroke={ROUTE_BASE_COLOR} strokeWidth="3.6" />
+        {ROUTE_PATHS.map(({ label, path }) => (
+          <path key={`base-${label}`} d={path} stroke={ROUTE_BASE_COLOR} strokeWidth="3.6" />
         ))}
-        {ROUTE_PATHS.map((path) => (
-          <path key={`dash-${path}`} d={path} stroke={ROUTE_DASH_COLOR} strokeWidth="0.55" strokeDasharray="1.2 1.2" />
+        {ROUTE_PATHS.map(({ label, path }) => (
+          <path key={`dash-${label}`} d={path} stroke={ROUTE_DASH_COLOR} strokeWidth="0.55" strokeDasharray="1.2 1.2" />
         ))}
       </g>
       <g aria-hidden="true" opacity="0.85">
-        {/* Viridian Forest canopy blocks */}
-        <path d="M14 64 h12 v6 h-12z M16 72 h8 v5 h-8z" fill="#75c878" />
-        {/* Mt. Moon ridge and cave entrance */}
-        <path d="M30 47 l2 -4 l2 4z M31 47 h6 l2 -4 l2 4 h4 v5 h-14z" fill="#a48a70" />
-        {/* Power Plant structure */}
-        <path d="M54 50 h8 v5 h-8z M58 46 h5 v4 h-5z" fill="#d9c68f" />
-        {/* Northeast islands */}
-        <circle cx="91" cy="17" r="1.3" fill="#65b96d" />
-        <circle cx="87" cy="21" r="1.1" fill="#65b96d" />
-        <circle cx="92" cy="25" r="1.2" fill="#65b96d" />
+        {TERRAIN_DECORATIONS.map(({ label, path, fill }) => (
+          <path key={label} d={path} fill={fill} />
+        ))}
+        {NORTHEAST_ISLANDS.map((island) => (
+          <circle key={`${island.cx}-${island.cy}`} cx={island.cx} cy={island.cy} r={island.r} fill="#65b96d" />
+        ))}
       </g>
 
       {locations.map(({ location, point, encounters }) => {
