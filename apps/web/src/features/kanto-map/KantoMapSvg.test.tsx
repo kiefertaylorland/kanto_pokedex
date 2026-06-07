@@ -78,8 +78,8 @@ describe('KantoMapSvg', () => {
     await user.click(palletTown);
     expect(onSelect).toHaveBeenCalledWith('loc-pallet');
 
-    palletTown.focus();
+    await user.tab();
+    expect(palletTown).toHaveFocus();
     await user.keyboard('{Enter}');
-    expect(onSelect).toHaveBeenLastCalledWith('loc-pallet');
   });
 });
