@@ -2,10 +2,9 @@
 
 🔗 **Live app:** [kanto-pokedex.pages.dev](https://kanto-pokedex.pages.dev)
 
-An auth-gated, Generation-I (National Dex 1–151) Pokédex: browse/search/filter/sort all 151
+Generation-I (National Dex 1–151) Pokédex: browse/search/filter/sort all 151
 Pokémon, view detail pages (stats, abilities, evolution, Red/Blue flavor text, encounters), and
-explore a retro Kanto SVG map. Built to conform to `/.specify/memory/constitution.md` v1.0.0
-(security principles SEC-001…SEC-015).
+explore a retro Kanto SVG map.
 
 **Stack:** React 18 + Vite + TanStack Router/Query + Tailwind + shadcn/ui + Zod (pnpm monorepo) ·
 Supabase (Postgres + Auth + Edge Functions) · Cloudflare Pages + Pages Functions.
