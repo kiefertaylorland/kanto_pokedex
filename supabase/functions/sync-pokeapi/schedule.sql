@@ -6,7 +6,7 @@
 -- scheduled job (and an admin holding the secret) can trigger a sync.
 
 create extension if not exists pg_cron;
-create extension if not exists pg_net;
+create extension if not exists pg_net with schema extensions;
 
 -- Store the trigger secret + function URL in Vault (do NOT hardcode here).
 --   select vault.create_secret('<SYNC_SECRET>', 'sync_secret');
