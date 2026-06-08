@@ -2,7 +2,10 @@ import { Link, Outlet } from '@tanstack/react-router';
 import { useAuth } from '@/features/auth/auth';
 import { Button } from '@/components/ui/button';
 import { PokeballMark } from '@/components/PokeballMark';
+<<<<<<< HEAD
 import { SoundToggle } from '@/features/sound/SoundToggle';
+=======
+>>>>>>> origin/main
 
 /** App shell: header nav + routed outlet. Header adapts to auth state. */
 export function RootLayout() {

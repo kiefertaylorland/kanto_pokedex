@@ -20,10 +20,13 @@ import { Button } from '@/components/ui/button';
 import { FavStar } from '@/components/FavStar';
 import { NotFound } from '@/routes/NotFound';
 import { useFavorites } from '@/features/favorites/useFavorites';
+<<<<<<< HEAD
 import { useSoundPreference, isSoundEnabled } from '@/features/sound/useSoundPreference';
 import { useCry } from '@/features/sound/useCry';
 import { cryUrl } from '@/features/sound/cry';
 import { CryButton } from '@/features/sound/CryButton';
+=======
+>>>>>>> origin/main
 import * as React from 'react';
 
 /** Pokémon detail page (FR-016..026). */
@@ -33,8 +36,11 @@ export function DetailPage() {
   const dexId = parseDexId(raw);
   const numericRaw = /^\d+$/.test(raw) ? raw : undefined;
   const { isFavorite, toggle } = useFavorites();
+<<<<<<< HEAD
   const { enabled: soundEnabled } = useSoundPreference();
   const { play } = useCry();
+=======
+>>>>>>> origin/main
 
   React.useEffect(() => {
     if (dexId !== null) track('detail_viewed');

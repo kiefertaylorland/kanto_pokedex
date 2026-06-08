@@ -31,6 +31,7 @@ test.describe('404 not-found (public catch-all)', () => {
   });
 });
 
+<<<<<<< HEAD
 test.describe('Cry sound toggle (public header control)', () => {
   // Each Playwright test gets a fresh context, so localStorage starts empty.
   test('is on by default, toggles off, and persists across reload', async ({ page }) => {
@@ -65,6 +66,8 @@ test.describe('Detail cry replay (authenticated)', () => {
   });
 });
 
+=======
+>>>>>>> origin/main
 test.describe('Favorites + Compare (authenticated)', () => {
   test.skip(!existsSync(SESSION_FILE), 'No test backend configured (global-setup minted no session).');
 
