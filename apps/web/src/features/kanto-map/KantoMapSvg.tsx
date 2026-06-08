@@ -30,6 +30,9 @@ const SHAPE_LABEL: Record<string, string> = {
   special: 'Special — star',
 };
 
+const STAR_OUTER_RADIUS = 2.3;
+const STAR_INNER_RADIUS = 0.95;
+
 type LabelAnchor = 'top' | 'right' | 'bottom' | 'left' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 
 const LABEL_ANCHORS: Record<
@@ -55,7 +58,7 @@ function labelProps(anchor: string | null) {
 function starPoints(): string {
   const pts: string[] = [];
   for (let i = 0; i < 10; i++) {
-    const r = i % 2 === 0 ? 2.3 : 0.95;
+    const r = i % 2 === 0 ? STAR_OUTER_RADIUS : STAR_INNER_RADIUS;
     const a = (Math.PI / 5) * i - Math.PI / 2;
     pts.push(`${(r * Math.cos(a)).toFixed(2)},${(r * Math.sin(a)).toFixed(2)}`);
   }
