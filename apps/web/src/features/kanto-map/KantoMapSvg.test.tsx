@@ -61,7 +61,8 @@ const locations: MapLocationEncounters[] = [
 
 describe('KantoMapSvg', () => {
   it('renders a layered Kanto-style map with accessible location markers', () => {
-    const { container } = render(<KantoMapSvg locations={locations} selectedId={null} onSelect={vi.fn()} />);
+    // The selected location's name label is shown (labels otherwise appear on hover/focus).
+    const { container } = render(<KantoMapSvg locations={locations} selectedId="loc-route-1" onSelect={vi.fn()} />);
 
     expect(screen.getByRole('img', { name: /map of the kanto region/i })).toBeInTheDocument();
     expect(screen.getByTestId('kanto-landmass')).toBeInTheDocument();

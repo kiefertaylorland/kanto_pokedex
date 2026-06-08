@@ -14,12 +14,14 @@ export function ScreenHeader({
   actions?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-3">
-      <div className="space-y-1">
-        {kicker && <p className="text-xs uppercase tracking-wide text-ink-500">{kicker}</p>}
-        <h1 className="font-display text-2xl text-ink-900">{title}</h1>
+    <div className="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        {kicker && (
+          <p className="mb-2 font-display text-2xs uppercase tracking-wide text-brand-600">{kicker}</p>
+        )}
+        <h1 className="font-sans text-3xl font-bold text-ink-900">{title}</h1>
       </div>
-      {actions && <div className="flex items-center gap-2">{actions}</div>}
+      {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
     </div>
   );
 }

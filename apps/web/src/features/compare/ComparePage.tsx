@@ -18,6 +18,8 @@ import { TypeBadge } from '@/components/TypeBadge';
 import { AbilityTag } from '@/components/AbilityTag';
 import { FavStar } from '@/components/FavStar';
 import { PokeballMark } from '@/components/PokeballMark';
+import { ScreenHeader } from '@/components/ScreenHeader';
+import { Select } from '@/components/Select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LoadingState, ErrorState } from '@/components/state';
@@ -47,16 +49,19 @@ export function ComparePage() {
   const cardB = b != null ? options.find((p) => p.national_dex_number === b) ?? null : null;
 
   return (
-    <div className="mx-auto max-w-xl space-y-6">
-      <h1 className="font-display text-2xl text-ink-900">Compare</h1>
+    <div className="mx-auto max-w-xl space-y-6 px-6 py-8">
+      <Link to="/pokedex" className="text-sm text-ink-500 hover:underline">
+        ← Back to Pokédex
+      </Link>
+      <ScreenHeader kicker="Side by side" title="Compare Pokémon" />
 
       {/* Picker toolbar. */}
-      <div className="flex flex-col items-center gap-3 rounded-md border-2 border-border-strong bg-surface p-4 sm:flex-row">
-        <PokemonSelect label="Pokémon A" value={a} options={options} onChange={(v) => setSlot('a', v)} />
-        <Button variant="ghost" size="sm" onClick={swap} aria-label="Swap A and B">
+      <div className="flex flex-col items-end gap-3 rounded-md border-2 border-border-strong bg-surface p-4 sm:flex-row">
+        <PokemonSelect label="A" value={a} options={options} onChange={(v) => setSlot('a', v)} />
+        <Button variant="ghost" size="sm" onClick={swap} aria-label="Swap A and B" className="mb-0.5">
           ⇄ Swap
         </Button>
-        <PokemonSelect label="Pokémon B" value={b} options={options} onChange={(v) => setSlot('b', v)} />
+        <PokemonSelect label="B" value={b} options={options} onChange={(v) => setSlot('b', v)} />
       </div>
 
       {/* Identity row. */}
@@ -84,26 +89,21 @@ function PokemonSelect({
   options: PokemonCard[];
   onChange: (dex: number | undefined) => void;
 }) {
-  const id = `compare-${label.replace(/\s+/g, '-').toLowerCase()}`;
+  const selectOptions = [
+    { value: '', label: 'Select a Pokémon…' },
+    ...options.map((p) => ({
+      value: String(p.national_dex_number),
+      label: `№${String(p.national_dex_number).padStart(3, '0')} · ${p.display_name}`,
+    })),
+  ];
   return (
-    <div className="flex w-full flex-col gap-1">
-      <label htmlFor={id} className="text-sm text-ink-700">
-        {label}
-      </label>
-      <select
-        id={id}
-        value={value ?? ''}
-        onChange={(e) => onChange(e.target.value === '' ? undefined : Number(e.target.value))}
-        className="h-10 w-full rounded-md border border-border-strong bg-surface px-2 text-sm text-ink-900"
-      >
-        <option value="">Select a Pokémon…</option>
-        {options.map((p) => (
-          <option key={p.national_dex_number} value={p.national_dex_number}>
-            №{String(p.national_dex_number).padStart(3, '0')} · {p.display_name}
-          </option>
-        ))}
-      </select>
-    </div>
+    <Select
+      label={label}
+      value={value != null ? String(value) : ''}
+      options={selectOptions}
+      onChange={(v) => onChange(v === '' ? undefined : Number(v))}
+      className="w-full"
+    />
   );
 }
 

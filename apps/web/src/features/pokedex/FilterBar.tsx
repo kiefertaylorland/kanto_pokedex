@@ -1,28 +1,30 @@
-import {
-  TYPE_NAMES,
-  typeDisplayName,
-  SORT_KEYS,
-  type BrowserQuery,
-  type SortKey,
-  type TypeName,
-} from '@kanto/shared';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from '@/components/ui/button';
+import { TYPE_NAMES, type BrowserQuery, type SortKey, type TypeName } from '@kanto/shared';
+import { SearchInput } from '@/components/SearchInput';
+import { Select } from '@/components/Select';
+import { TypeBadge } from '@/components/TypeBadge';
 
-const SORT_LABELS: Record<SortKey, string> = {
-  number: 'Number',
-  name: 'Name',
-  base_stat_total: 'Base stat total',
+const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+  { value: 'number', label: 'Number' },
+  { value: 'name', label: 'Name A–Z' },
+  { value: 'base_stat_total', label: 'Base stat total' },
+];
+
+/** Direction the design implies for each sort key (BST reads high→low). */
+const SORT_DIR: Record<SortKey, BrowserQuery['dir']> = {
+  number: 'asc',
+  name: 'asc',
+  base_stat_total: 'desc',
 };
 
 interface Props {
   query: BrowserQuery;
   onChange: (patch: Partial<BrowserQuery>) => void;
+  /** Types absent from the dataset render disabled. All 15 Gen-I types are present. */
+  presentTypes?: ReadonlySet<TypeName>;
 }
 
-/** Search + multi-select type filter (OR) + sort controls (FR-010..013). */
-export function FilterBar({ query, onChange }: Props) {
+/** Search + sort + interactive type-badge filter (OR) toolbar (FR-010..013). */
+export function FilterBar({ query, onChange, presentTypes }: Props) {
   function toggleType(type: TypeName) {
     const next = query.types.includes(type)
       ? query.types.filter((t) => t !== type)
@@ -32,58 +34,57 @@ export function FilterBar({ query, onChange }: Props) {
 
   return (
     <div className="space-y-4 rounded-md border-2 border-border-strong bg-surface p-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <label htmlFor="search" className="sr-only">
-          Search by name or number
-        </label>
-        <Input
-          id="search"
-          type="search"
-          inputMode="search"
-          placeholder="Search by name or number (e.g. pika or 25)"
+      <div className="flex flex-wrap items-end gap-4">
+        <SearchInput
           value={query.q}
-          onChange={(e) => onChange({ q: e.target.value, page: 1 })}
-          className="sm:max-w-xs"
+          onChange={(q) => onChange({ q, page: 1 })}
+          onClear={() => onChange({ q: '', page: 1 })}
+          placeholder="Search by name or number"
         />
-
-        <div className="flex items-center gap-2">
-          <label htmlFor="sort" className="text-sm text-ink-700">
-            Sort
-          </label>
-          <select
-            id="sort"
-            value={query.sort}
-            onChange={(e) => onChange({ sort: e.target.value as SortKey, page: 1 })}
-            className="h-10 rounded-md border border-border-strong bg-surface px-2 text-sm text-ink-900"
-          >
-            {SORT_KEYS.map((k) => (
-              <option key={k} value={k}>
-                {SORT_LABELS[k]}
-              </option>
-            ))}
-          </select>
-          <Button
-            variant="outline"
-            size="sm"
-            aria-label={`Toggle sort direction, currently ${query.dir === 'asc' ? 'ascending' : 'descending'}`}
-            onClick={() => onChange({ dir: query.dir === 'asc' ? 'desc' : 'asc' })}
-          >
-            {query.dir === 'asc' ? '↑ Asc' : '↓ Desc'}
-          </Button>
-        </div>
+        <Select
+          label="Sort"
+          value={query.sort}
+          options={SORT_OPTIONS}
+          onChange={(value) => {
+            const sort = value as SortKey;
+            onChange({ sort, dir: SORT_DIR[sort], page: 1 });
+          }}
+          className="w-48"
+        />
       </div>
 
-      <fieldset>
-        <legend className="mb-2 text-sm font-medium text-ink-700">Filter by type</legend>
-        <div className="flex flex-wrap gap-x-4 gap-y-2">
-          {TYPE_NAMES.map((type) => (
-            <label key={type} className="flex cursor-pointer items-center gap-1.5 text-sm text-ink-700">
-              <Checkbox checked={query.types.includes(type)} onCheckedChange={() => toggleType(type)} />
-              {typeDisplayName(type)}
-            </label>
-          ))}
+      <div>
+        <div className="mb-2 flex items-baseline justify-between gap-3">
+          <p className="text-sm font-semibold text-ink-700">
+            Filter by type{query.types.length > 0 ? ` · ${query.types.length} selected` : ''}
+          </p>
+          {query.types.length > 0 && (
+            <button
+              type="button"
+              onClick={() => onChange({ types: [], page: 1 })}
+              className="text-xs font-semibold text-info underline"
+            >
+              Clear all types
+            </button>
+          )}
         </div>
-      </fieldset>
+        <div className="flex flex-wrap gap-2">
+          {TYPE_NAMES.map((type) => {
+            const disabled = presentTypes ? !presentTypes.has(type) : false;
+            return (
+              <TypeBadge
+                key={type}
+                type={type}
+                variant="outline"
+                interactive
+                selected={query.types.includes(type)}
+                disabled={disabled}
+                onClick={() => !disabled && toggleType(type)}
+              />
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
