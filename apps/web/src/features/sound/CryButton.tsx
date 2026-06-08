@@ -30,6 +30,7 @@ export function CryButton({
         'enabled:hover:bg-surface-2 disabled:cursor-not-allowed disabled:text-ink-400 disabled:opacity-60',
         className,
       )}
+      )}
     >
       <Volume2 className="h-[18px] w-[18px]" aria-hidden />
     </button>
