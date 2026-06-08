@@ -28,7 +28,6 @@ describe('useSoundPreference', () => {
   });
 
   it('reads a stored "false" as disabled', () => {
-  it('reads a stored "false" as disabled', () => {
     localStorage.setItem(SOUND_STORAGE_KEY, 'false');
     const { result } = renderHook(() => useSoundPreference());
     expect(result.current.enabled).toBe(false);
