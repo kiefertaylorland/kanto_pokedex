@@ -42,7 +42,6 @@ function subscribe(listener: () => void): () => void {
       listener();
     }
   };
-  };
   window.addEventListener('storage', onStorage);
   return () => {
     listeners.delete(listener);
