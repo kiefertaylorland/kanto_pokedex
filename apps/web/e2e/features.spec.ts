@@ -31,6 +31,40 @@ test.describe('404 not-found (public catch-all)', () => {
   });
 });
 
+test.describe('Cry sound toggle (public header control)', () => {
+  // Each Playwright test gets a fresh context, so localStorage starts empty.
+  test('is on by default, toggles off, and persists across reload', async ({ page }) => {
+    await page.goto('/');
+    const on = page.getByRole('button', { name: /turn cry sound off/i });
+    await expect(on).toBeVisible();
+    await expect(on).toHaveAttribute('aria-pressed', 'true');
+
+    await on.click();
+    const off = page.getByRole('button', { name: /turn cry sound on/i });
+    await expect(off).toHaveAttribute('aria-pressed', 'false');
+
+    await page.reload();
+    await expect(page.getByRole('button', { name: /turn cry sound on/i })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+  });
+});
+
+test.describe('Detail cry replay (authenticated)', () => {
+  test.skip(!existsSync(SESSION_FILE), 'No test backend configured (global-setup minted no session).');
+
+  test.beforeEach(async ({ page }) => {
+    await injectSession(page);
+  });
+
+  test('detail page exposes a replay control for the cry', async ({ page }) => {
+    await page.goto('/pokemon/25');
+    await expect(page.getByRole('heading', { name: 'Pikachu' })).toBeVisible();
+    await expect(page.getByRole('button', { name: /play pikachu's cry/i })).toBeVisible();
+  });
+});
+
 test.describe('Favorites + Compare (authenticated)', () => {
   test.skip(!existsSync(SESSION_FILE), 'No test backend configured (global-setup minted no session).');
 
