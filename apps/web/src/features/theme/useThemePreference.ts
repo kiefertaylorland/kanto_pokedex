@@ -1,4 +1,4 @@
-import { useEffect, useSyncExternalStore } from 'react';
+import { useLayoutEffect, useSyncExternalStore } from 'react';
 
 export type ThemePreference = 'light' | 'dark';
 
@@ -60,11 +60,9 @@ export function toggleTheme(): void {
 }
 
 export function useThemePreference() {
-export function useThemePreference() {
   const theme = useSyncExternalStore(subscribe, read, () => DEFAULT_THEME);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (document.documentElement.dataset.theme !== theme) applyTheme(theme);
   }, [theme]);
   return { theme, toggle: toggleTheme };
-}
 }
