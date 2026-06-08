@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import type { PokemonCard } from '@kanto/shared';
 import { PokemonCardItem } from './PokemonCardItem';
