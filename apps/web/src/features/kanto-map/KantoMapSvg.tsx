@@ -73,7 +73,7 @@ function MarkerShape({ markerType, scale = 1 }: { markerType: string; scale?: nu
   return (
     <g
       className="transition-transform"
-      style={{ transform: `scale(${scale})`, transformBox: 'fill-box', transformOrigin: 'center' }}
+      style={{ transform: `scale(${scale})`, transformOrigin: '0 0' }}
     >
       {shape === 'square' && <rect x={-1.8} y={-1.8} width={3.6} height={3.6} {...common} />}
       {shape === 'diamond' && <rect x={-1.7} y={-1.7} width={3.4} height={3.4} transform="rotate(45)" {...common} />}

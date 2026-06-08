@@ -41,7 +41,7 @@ export function SearchInput({
           aria-hidden
         />
       ) : (
-        onClear && value && (
+        onClear !== undefined && value && (
           <button
             type="button"
             onClick={onClear}
