@@ -68,7 +68,6 @@ function renderDetail() {
       detailRoute,
       stub('/pokedex'),
       stub('/compare'),
-      stub('/map'),
     ]),
     history: createMemoryHistory({ initialEntries: ['/pokemon/25'] }),
   });
@@ -125,5 +124,28 @@ describe('DetailPage cry playback', () => {
 
     await userEvent.click(screen.getByRole('button', { name: /play pikachu's cry/i }));
     expect(FakeAudio.last().play).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('DetailPage encounters', () => {
+  it('shows encounter locations without linking to the removed map screen', async () => {
+    vi.mocked(fetchPokemonDetail).mockResolvedValue({
+      ...PIKACHU,
+      encounters: [
+        {
+          kanto_location_id: 'loc-pallet',
+          location_display_name: 'Pallet Town',
+          method: 'Walking',
+          confidence: 'curated',
+          notes: null,
+        },
+      ],
+    });
+
+    renderDetail();
+    await screen.findByRole('heading', { name: 'Pikachu' });
+
+    expect(screen.getByText('Pallet Town')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Pallet Town' })).not.toBeInTheDocument();
   });
 });

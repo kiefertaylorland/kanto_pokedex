@@ -3,8 +3,7 @@
 🔗 **Live app:** [kanto-pokedex.pages.dev](https://kanto-pokedex.pages.dev)
 
 Generation-I (National Dex 1–151) Pokédex: browse/search/filter/sort all 151
-Pokémon, view detail pages (stats, abilities, evolution, Red/Blue flavor text, encounters), and
-explore a retro Kanto SVG map.
+Pokémon, and view detail pages (stats, abilities, evolution, Red/Blue flavor text, encounters).
 
 **Stack:** React 18 + Vite + TanStack Router/Query + Tailwind + shadcn/ui + Zod (pnpm monorepo) ·
 Supabase (Postgres + Auth + Edge Functions) · Cloudflare Pages + Pages Functions.
@@ -49,7 +48,7 @@ pnpm test           # Vitest (shared schemas + web components)
 pnpm build          # production build
 pnpm secret-scan    # SEC-005: fails on a service_role JWT in source/bundle
 supabase test db    # SEC-004: pgTAP RLS cross-user-denial tests
-pnpm test:e2e       # Playwright smoke (login → browse → detail → map) + axe
+pnpm test:e2e       # Playwright smoke (login → browse → detail) + axe
 ```
 
 ## Deployment

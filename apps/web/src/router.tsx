@@ -15,7 +15,6 @@ import { AuthPage } from '@/features/auth/AuthPage';
 import { AuthCallback } from '@/features/auth/AuthCallback';
 import { PokedexPage } from '@/features/pokedex/PokedexPage';
 import { DetailPage } from '@/features/pokemon-detail/DetailPage';
-import { MapPage } from '@/features/kanto-map/MapPage';
 import { FavoritesPage } from '@/features/favorites/FavoritesPage';
 import { ComparePage } from '@/features/compare/ComparePage';
 
@@ -65,14 +64,6 @@ const detailRoute = createRoute({
   component: DetailPage,
 });
 
-const mapSearchSchema = z.object({ location: z.string().optional() });
-const mapRoute = createRoute({
-  getParentRoute: () => protectedRoute,
-  path: '/map',
-  component: MapPage,
-  validateSearch: (search: Record<string, unknown>) => mapSearchSchema.parse(search),
-});
-
 const favoritesRoute = createRoute({
   getParentRoute: () => protectedRoute,
   path: '/favorites',
@@ -94,7 +85,7 @@ const routeTree = rootRoute.addChildren([
   indexRoute,
   authRoute,
   authCallbackRoute,
-  protectedRoute.addChildren([pokedexRoute, detailRoute, mapRoute, favoritesRoute, compareRoute]),
+  protectedRoute.addChildren([pokedexRoute, detailRoute, favoritesRoute, compareRoute]),
 ]);
 
 export function createAppRouter(context: RouterContext) {

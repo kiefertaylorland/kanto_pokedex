@@ -13,14 +13,13 @@ async function injectSession(page: Page) {
 }
 
 test.describe('404 not-found (public catch-all)', () => {
-  test('renders the 404 card with two real, focusable actions', async ({ page }) => {
+  test('renders the 404 card with a real, focusable action', async ({ page }) => {
     await page.goto('/this-route-does-not-exist');
     await expect(page.getByText('404')).toBeVisible();
     await expect(page.getByText(/not found/i)).toBeVisible();
     const back = page.getByRole('link', { name: /back to pokédex/i });
-    const map = page.getByRole('link', { name: /view the kanto map/i });
     await expect(back).toBeVisible();
-    await expect(map).toBeVisible();
+    await expect(page.getByRole('link', { name: /view the kanto map/i })).toHaveCount(0);
   });
 
   test('no critical accessibility violations on 404', async ({ page }) => {

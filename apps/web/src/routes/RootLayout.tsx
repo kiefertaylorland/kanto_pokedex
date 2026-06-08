@@ -22,9 +22,6 @@ export function RootLayout() {
                 <Button asChild variant="ghost" size="sm" className="text-white hover:bg-white/10">
                   <Link to="/pokedex">Browse</Link>
                 </Button>
-                <Button asChild variant="ghost" size="sm" className="text-white hover:bg-white/10">
-                  <Link to="/map">Map</Link>
-                </Button>
                 <Button variant="outline" size="sm" className="border-white text-white hover:bg-white/10" onClick={() => void signOut()}>
                   Sign out
                 </Button>
