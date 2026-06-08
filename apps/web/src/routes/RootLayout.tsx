@@ -3,6 +3,7 @@ import { useAuth } from '@/features/auth/auth';
 import { Button } from '@/components/ui/button';
 import { PokeballMark } from '@/components/PokeballMark';
 import { SoundToggle } from '@/features/sound/SoundToggle';
+import { ThemeToggle } from '@/features/theme/ThemeToggle';
 
 /** App shell: header nav + routed outlet. Header adapts to auth state. */
 export function RootLayout() {
@@ -16,6 +17,7 @@ export function RootLayout() {
             Kanto Pokédex
           </Link>
           <nav className="flex items-center gap-2">
+            <ThemeToggle />
             <SoundToggle />
             {isAuthenticated ? (
               <>
