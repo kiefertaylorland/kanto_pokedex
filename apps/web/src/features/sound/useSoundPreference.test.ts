@@ -38,4 +38,16 @@ describe('useSoundPreference', () => {
     act(() => toggleSound());
     expect(result.current.enabled).toBe(false);
   });
+
+  it('updates when another tab clears localStorage', () => {
+    localStorage.setItem(SOUND_STORAGE_KEY, 'false');
+    const { result } = renderHook(() => useSoundPreference());
+    expect(result.current.enabled).toBe(false);
+
+    localStorage.clear();
+    act(() => {
+      window.dispatchEvent(new StorageEvent('storage', { key: null }));
+    });
+    expect(result.current.enabled).toBe(true);
+  });
 });

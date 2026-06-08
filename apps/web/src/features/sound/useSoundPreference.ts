@@ -37,9 +37,9 @@ function write(next: boolean): void {
 function subscribe(listener: () => void): () => void {
   listeners.add(listener);
   const onStorage = (e: StorageEvent) => {
-    if (e.key === SOUND_STORAGE_KEY) {
+    if (e.key === SOUND_STORAGE_KEY || e.key === null) {
       cache = null; // invalidate; next snapshot re-reads from storage
-      listeners.forEach((l) => l());
+      listener();
     }
   };
   window.addEventListener('storage', onStorage);
