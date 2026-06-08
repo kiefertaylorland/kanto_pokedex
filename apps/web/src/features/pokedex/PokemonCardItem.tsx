@@ -41,7 +41,7 @@ export function PokemonCardItem({ pokemon }: { pokemon: PokemonCard }) {
             )}
           </div>
           <span className="text-sm font-semibold text-ink-900">{pokemon.display_name}</span>
-          <div className="flex flex-wrap justify-center gap-1">
+          <div className="flex min-h-14 flex-wrap content-start items-start justify-center gap-1">
             {pokemon.types.map((t) => (
               <TypeBadge key={t} type={t} />
             ))}
