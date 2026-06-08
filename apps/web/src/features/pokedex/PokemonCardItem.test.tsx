@@ -27,12 +27,16 @@ const basePokemon: PokemonCard = {
 
 describe('PokemonCardItem', () => {
   it('reserves consistent vertical space for the type badges', () => {
-    const { rerender } = render(<PokemonCardItem pokemon={basePokemon} />);
+    const { rerender, container } = render(<PokemonCardItem pokemon={basePokemon} />);
 
-    expect(screen.getByText('Fire').parentElement).toHaveClass('min-h-14', 'items-start', 'content-start');
+    const dualTypeContainer = container.querySelector('div.min-h-14');
+    expect(dualTypeContainer).not.toBeNull();
+    expect(dualTypeContainer!).toHaveClass('min-h-14', 'items-start', 'content-start');
 
     rerender(<PokemonCardItem pokemon={{ ...basePokemon, types: ['fire'] }} />);
 
-    expect(screen.getByText('Fire').parentElement).toHaveClass('min-h-14', 'items-start', 'content-start');
+    const singleTypeContainer = container.querySelector('div.min-h-14');
+    expect(singleTypeContainer).not.toBeNull();
+    expect(singleTypeContainer!).toHaveClass('min-h-14', 'items-start', 'content-start');
   });
 });
