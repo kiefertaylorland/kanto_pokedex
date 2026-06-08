@@ -70,6 +70,11 @@ export function PokedexPage() {
             {result.data.total} result{result.data.total === 1 ? '' : 's'} · page {result.data.page} of{' '}
             {result.data.pageCount}
           </p>
+          <Pagination
+            page={result.data.page}
+            pageCount={result.data.pageCount}
+            onChange={(page) => update({ page })}
+          />
           <ul
             className="grid gap-4"
             style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))' }}
@@ -80,14 +85,6 @@ export function PokedexPage() {
               </li>
             ))}
           </ul>
-
-          <div className="mt-8">
-            <Pagination
-              page={result.data.page}
-              pageCount={result.data.pageCount}
-              onChange={(page) => update({ page })}
-            />
-          </div>
         </>
       )}
     </div>
