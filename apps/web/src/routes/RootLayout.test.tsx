@@ -42,7 +42,12 @@ function renderLayout(path: string) {
     history: createMemoryHistory({ initialEntries: [path] }),
   });
 
-  return render(<RouterProvider router={router} />);
+  return render(
+    <>
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      <RouterProvider router={router as any} />
+    </>,
+  );
 }
 
 describe('RootLayout navigation', () => {
