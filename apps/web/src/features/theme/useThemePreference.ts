@@ -60,7 +60,11 @@ export function toggleTheme(): void {
 }
 
 export function useThemePreference() {
+export function useThemePreference() {
   const theme = useSyncExternalStore(subscribe, read, () => DEFAULT_THEME);
-  useEffect(() => applyTheme(theme), [theme]);
+  useEffect(() => {
+    if (document.documentElement.dataset.theme !== theme) applyTheme(theme);
+  }, [theme]);
   return { theme, toggle: toggleTheme };
+}
 }
