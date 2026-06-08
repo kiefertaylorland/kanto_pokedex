@@ -41,10 +41,10 @@ export function SearchInput({
           aria-hidden
         />
       ) : (
-        value && (
+        value && onClear && (
           <button
             type="button"
-            onClick={() => onClear?.()}
+            onClick={onClear}
             aria-label="Clear search"
             className="absolute right-2 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-sm text-ink-500 hover:bg-surface-3"
           >

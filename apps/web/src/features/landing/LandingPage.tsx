@@ -47,7 +47,7 @@ export function LandingPage() {
           <p className="mb-4 font-display text-2xs uppercase tracking-wide text-brand-600">
             № 001–151 · Generation I
           </p>
-          <h1 className="mb-5 font-display text-display leading-display text-ink-900">
+          <h1 className="mb-5 font-display text-display text-ink-900">
             The Kanto
             <br />
             Pokédex

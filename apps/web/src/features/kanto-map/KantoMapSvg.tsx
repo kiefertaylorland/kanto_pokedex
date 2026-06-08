@@ -51,11 +51,11 @@ function labelProps(anchor: string | null) {
   return LABEL_ANCHORS[(anchor ?? 'top') as LabelAnchor] ?? LABEL_ANCHORS.top;
 }
 
-/** Five-point star polygon points, centered on the origin and scaled by `s`. */
-function starPoints(s: number): string {
+/** Five-point star polygon points, centered on the origin. */
+function starPoints(): string {
   const pts: string[] = [];
   for (let i = 0; i < 10; i++) {
-    const r = i % 2 === 0 ? 2.3 * s : 0.95 * s;
+    const r = i % 2 === 0 ? 2.3 : 0.95;
     const a = (Math.PI / 5) * i - Math.PI / 2;
     pts.push(`${(r * Math.cos(a)).toFixed(2)},${(r * Math.sin(a)).toFixed(2)}`);
   }
@@ -66,23 +66,20 @@ function starPoints(s: number): string {
 function MarkerShape({ markerType, scale = 1 }: { markerType: string; scale?: number }) {
   const shape = MARKER_SHAPE[markerType] ?? 'circle';
   const fill = MARKER_FILL[markerType] ?? '#5E6056';
-  const s = scale;
-  const common = { fill, stroke: '#fff', strokeWidth: 0.4, className: 'transition-transform' };
-  switch (shape) {
-    case 'square':
-      return <rect x={-1.8 * s} y={-1.8 * s} width={3.6 * s} height={3.6 * s} {...common} />;
-    case 'diamond':
-      return <rect x={-1.7 * s} y={-1.7 * s} width={3.4 * s} height={3.4 * s} transform="rotate(45)" {...common} />;
-    case 'triangle':
-      return <polygon points={`0,${-2.2 * s} ${2 * s},${1.6 * s} ${-2 * s},${1.6 * s}`} {...common} />;
-    case 'chip':
-      return <rect x={-2.4 * s} y={-1.5 * s} width={4.8 * s} height={3 * s} rx={1.4 * s} ry={1.4 * s} {...common} />;
-    case 'star':
-      return <polygon points={starPoints(s)} {...common} />;
-    case 'circle':
-    default:
-      return <circle r={1.9 * s} {...common} />;
-  }
+  const common = { fill, stroke: '#fff', strokeWidth: 0.4 };
+  return (
+    <g
+      className="transition-transform"
+      style={{ transform: `scale(${scale})`, transformBox: 'fill-box', transformOrigin: 'center' }}
+    >
+      {shape === 'square' && <rect x={-1.8} y={-1.8} width={3.6} height={3.6} {...common} />}
+      {shape === 'diamond' && <rect x={-1.7} y={-1.7} width={3.4} height={3.4} transform="rotate(45)" {...common} />}
+      {shape === 'triangle' && <polygon points="0,-2.2 2,1.6 -2,1.6" {...common} />}
+      {shape === 'chip' && <rect x={-2.4} y={-1.5} width={4.8} height={3} rx={1.4} ry={1.4} {...common} />}
+      {shape === 'star' && <polygon points={starPoints()} {...common} />}
+      {shape === 'circle' && <circle r={1.9} {...common} />}
+    </g>
+  );
 }
 
 /** A standalone marker glyph (used in the list-view location cards). */
