@@ -1,4 +1,4 @@
-import { Link, Outlet } from '@tanstack/react-router';
+import { Link, Outlet, useLocation } from '@tanstack/react-router';
 import { useAuth } from '@/features/auth/auth';
 import { Button } from '@/components/ui/button';
 import { PokeballMark } from '@/components/PokeballMark';
@@ -8,6 +8,8 @@ import { ThemeToggle } from '@/features/theme/ThemeToggle';
 /** App shell: header nav + routed outlet. Header adapts to auth state. */
 export function RootLayout() {
   const { isAuthenticated, signOut } = useAuth();
+  const pathname = useLocation({ select: (location) => location.pathname });
+  const showBrowse = pathname.startsWith('/pokemon/');
   return (
     <div className="min-h-screen">
       <header className="border-b-2 border-border-strong bg-brand-600 text-white">
@@ -21,9 +23,11 @@ export function RootLayout() {
             <SoundToggle />
             {isAuthenticated ? (
               <>
-                <Button asChild variant="ghost" size="sm" className="text-white hover:bg-white/10">
-                  <Link to="/pokedex">Browse</Link>
-                </Button>
+                {showBrowse && (
+                  <Button asChild variant="ghost" size="sm" className="text-white hover:bg-white/10">
+                    <Link to="/pokedex">Browse</Link>
+                  </Button>
+                )}
                 <Button variant="outline" size="sm" className="border-white text-white hover:bg-white/10" onClick={() => void signOut()}>
                   Sign out
                 </Button>
