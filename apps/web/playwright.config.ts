@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * E2E smoke configuration. The smoke journey (login → browse → detail → map)
+ * E2E smoke configuration. The smoke journey (login → browse → detail)
  * runs against the preview/prod deploy in CI; locally it targets the dev server.
  */
 export default defineConfig({

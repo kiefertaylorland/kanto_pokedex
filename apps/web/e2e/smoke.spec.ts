@@ -36,7 +36,7 @@ test.describe('Public access (no session required)', () => {
   });
 });
 
-test.describe('Authenticated journey: login → browse → detail → map', () => {
+test.describe('Authenticated journey: login → browse → detail', () => {
   test.skip(!existsSync(SESSION_FILE), 'No test backend configured (global-setup minted no session).');
 
   test.beforeEach(async ({ page }) => {
@@ -65,14 +65,5 @@ test.describe('Authenticated journey: login → browse → detail → map', () =
     await page.goto('/pokemon/9999');
     await expect(page.getByText(/we don’t have data for №9999 yet/i)).toBeVisible();
     await expect(page.getByRole('link', { name: /back to pokédex/i })).toBeVisible();
-  });
-
-  test('map marker opens an encounter panel with provenance (P4, SC-007)', async ({ page }) => {
-    await page.goto('/map');
-    await expect(page.getByRole('heading', { name: 'Kanto Map' })).toBeVisible();
-    // Open a location known to have curated encounters.
-    await page.getByRole('button', { name: /Pallet Town/i }).click();
-    await expect(page.getByRole('dialog')).toBeVisible();
-    await expect(page.getByRole('dialog').getByText(/Curated|Inferred|PokéAPI/).first()).toBeVisible();
   });
 });

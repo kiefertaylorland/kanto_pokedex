@@ -26,9 +26,6 @@ export function NotFound({ dexId }: { dexId?: string }) {
           <Button asChild>
             <Link to="/pokedex">Back to Pokédex</Link>
           </Button>
-          <Button asChild variant="secondary">
-            <Link to="/map">View the Kanto map</Link>
-          </Button>
         </div>
       </div>
     </div>

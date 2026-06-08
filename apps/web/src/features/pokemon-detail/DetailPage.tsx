@@ -226,17 +226,7 @@ export function DetailPage() {
                 <ul className="flex flex-col gap-3">
                   {p.encounters.map((e, i) => (
                     <li key={`${e.kanto_location_id ?? 'loc'}-${i}`} className="flex flex-wrap items-center gap-2">
-                      {e.kanto_location_id ? (
-                        <Link
-                          to="/map"
-                          search={{ location: e.kanto_location_id }}
-                          className="border-b border-border-strong text-sm font-semibold text-ink-900 no-underline hover:border-ink-900"
-                        >
-                          {e.location_display_name ?? 'Unknown location'}
-                        </Link>
-                      ) : (
-                        <span className="text-sm font-semibold text-ink-900">{e.location_display_name ?? 'Unknown location'}</span>
-                      )}
+                      <span className="text-sm font-semibold text-ink-900">{e.location_display_name ?? 'Unknown location'}</span>
                       {e.method && <span className="text-xs text-ink-500">{e.method}</span>}
                       <ConfidenceLabel confidence={e.confidence} />
                     </li>

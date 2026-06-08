@@ -12,10 +12,5 @@ export const queryKeys = {
     index: () => ['pokemon', 'index'] as const,
     detail: (dexId: number) => ['pokemon', 'detail', dexId] as const,
   },
-  map: {
-    all: ['map'] as const,
-    locations: () => ['map', 'locations'] as const,
-    location: (kantoLocationId: string) => ['map', 'location', kantoLocationId] as const,
-  },
   session: ['session'] as const,
 } as const;
