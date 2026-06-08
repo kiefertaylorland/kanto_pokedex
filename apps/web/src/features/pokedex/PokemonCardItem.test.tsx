@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
 import type { PokemonCard } from '@kanto/shared';
 import { PokemonCardItem } from './PokemonCardItem';
 
 vi.mock('@tanstack/react-router', () => ({
-  Link: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+  Link: ({ children, className }: { children: ReactNode; className?: string }) => (
     <a href="/pokemon/6" className={className}>
       {children}
     </a>
