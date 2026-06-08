@@ -1,6 +1,6 @@
 import { useSearch, useNavigate, Link } from '@tanstack/react-router';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import { browserSearchInput, resolveBrowserQuery, PAGE_SIZE, type BrowserQuery } from '@kanto/shared';
+import { browserSearchInput, resolveBrowserQuery, type BrowserQuery } from '@kanto/shared';
 import { queryKeys } from '@/lib/queryKeys';
 import { toUserMessage } from '@/lib/errors';
 import { track } from '@/lib/analytics';
@@ -8,6 +8,8 @@ import { fetchPokemonPage } from './api';
 import { FilterBar } from './FilterBar';
 import { PokemonCardItem } from './PokemonCardItem';
 import { LoadingState, ErrorState, EmptyState } from '@/components/state';
+import { ScreenHeader } from '@/components/ScreenHeader';
+import { Pagination } from '@/components/Pagination';
 import { Button } from '@/components/ui/button';
 import { useFavorites } from '@/features/favorites/useFavorites';
 
@@ -38,18 +40,22 @@ export function PokedexPage() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-display text-2xl text-ink-900">Pokédex</h1>
-        <div className="flex items-center gap-2">
-          <Button asChild variant="secondary" size="sm">
-            <Link to="/favorites">★ Favorites · {favoritesCount}</Link>
-          </Button>
-          <Button asChild variant="secondary" size="sm">
-            <Link to="/compare">Compare</Link>
-          </Button>
-        </div>
-      </div>
+    <div className="mx-auto max-w-xl space-y-5 px-6 py-8">
+      <ScreenHeader
+        kicker="№ 001–151 · Generation I"
+        title="Pokédex"
+        actions={
+          <>
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/favorites">★ Favorites{favoritesCount ? ` · ${favoritesCount}` : ''}</Link>
+            </Button>
+            <Button asChild variant="secondary" size="sm">
+              <Link to="/compare">Compare</Link>
+            </Button>
+          </>
+        }
+      />
+
       <FilterBar query={query} onChange={update} />
 
       {result.isLoading ? (
@@ -61,9 +67,13 @@ export function PokedexPage() {
       ) : (
         <>
           <p className="text-sm text-ink-500" aria-live="polite">
-            {result.data.total} result{result.data.total === 1 ? '' : 's'} · page {result.data.page} of {result.data.pageCount}
+            {result.data.total} result{result.data.total === 1 ? '' : 's'} · page {result.data.page} of{' '}
+            {result.data.pageCount}
           </p>
-          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          <ul
+            className="grid gap-4"
+            style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))' }}
+          >
             {result.data.items.map((p) => (
               <li key={p.id}>
                 <PokemonCardItem pokemon={p} />
@@ -71,28 +81,13 @@ export function PokedexPage() {
             ))}
           </ul>
 
-          <nav className="flex items-center justify-center gap-3 pt-2" aria-label="Pagination">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={result.data.page <= 1}
-              onClick={() => update({ page: result.data!.page - 1 })}
-            >
-              Previous
-            </Button>
-            <span className="text-sm font-mono text-ink-700" aria-current="page">
-              {result.data.page} / {result.data.pageCount}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={result.data.page >= result.data.pageCount}
-              onClick={() => update({ page: result.data!.page + 1 })}
-            >
-              Next
-            </Button>
-          </nav>
-          <p className="text-center text-xs text-ink-500">Showing up to {PAGE_SIZE} per page.</p>
+          <div className="mt-8">
+            <Pagination
+              page={result.data.page}
+              pageCount={result.data.pageCount}
+              onChange={(page) => update({ page })}
+            />
+          </div>
         </>
       )}
     </div>

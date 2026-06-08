@@ -2,7 +2,8 @@ import * as React from 'react';
 import { useAuth } from '@/features/auth/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+import { PokeballMark } from '@/components/PokeballMark';
 import { track } from '@/lib/analytics';
 
 /**
@@ -38,12 +39,18 @@ export function AuthPage() {
   }
 
   return (
-    <div className="mx-auto max-w-sm py-8">
-      <Card>
-        <CardHeader>
-          <CardTitle>Sign in</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+    <div className="mx-auto flex max-w-sm justify-center px-6 py-12">
+      <Card className="w-full max-w-[400px] rounded-lg p-6">
+        <CardContent className="space-y-5 p-0">
+          <div className="space-y-3 text-center">
+            <div className="flex flex-col items-center gap-2">
+              <PokeballMark className="h-10 w-10" />
+              <span className="font-display text-base text-ink-900">Kanto Pokédex</span>
+            </div>
+            <h1 className="text-xl font-bold text-ink-900">Sign in to explore</h1>
+            <p className="text-sm text-ink-500">Browse, search and map all 151 Pokémon.</p>
+          </div>
+
           <div className="space-y-2">
             <Button className="w-full" variant="outline" onClick={() => void handleOAuth('google')}>
               Continue with Google

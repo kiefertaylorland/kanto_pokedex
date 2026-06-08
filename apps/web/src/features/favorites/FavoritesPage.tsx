@@ -33,18 +33,23 @@ export function FavoritesPage() {
     first && second ? { a: first.national_dex_number, b: second.national_dex_number } : undefined;
 
   return (
-    <div className="space-y-4">
+    <div className="mx-auto max-w-xl space-y-5 px-6 py-8">
       <ScreenHeader
         title="Favorites"
         kicker={`${count} saved`}
         actions={
-          compareSearch && (
-            <Button asChild variant="secondary" size="sm">
-              <Link to="/compare" search={compareSearch}>
-                Compare
-              </Link>
+          <>
+            {compareSearch && (
+              <Button asChild variant="secondary" size="sm">
+                <Link to="/compare" search={compareSearch}>
+                  Compare
+                </Link>
+              </Button>
+            )}
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/pokedex">Browse all</Link>
             </Button>
-          )
+          </>
         }
       />
 
@@ -65,7 +70,7 @@ export function FavoritesPage() {
       ) : result.isError ? (
         <ErrorState message={toUserMessage(result.error)} onRetry={() => void result.refetch()} />
       ) : (
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <ul className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))' }}>
           {saved.map((p) => (
             <li key={p.id}>
               <PokemonCardItem pokemon={p} />

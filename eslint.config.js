@@ -16,6 +16,7 @@ export default tseslint.config(
       'supabase/functions/**', // Deno runtime — linted separately by Deno tooling
       'design_handoff_kanto_design_system/**', // delivery artifact — reference snippets, not app code
       'design_handoff_kanto_design_system 2/**', // delivery artifact (duplicate handoff bundle)
+      'docs/handoff/**', // design handoff: read-only reference prototypes + compiled DS bundle, not app code
     ],
   },
   js.configs.recommended,

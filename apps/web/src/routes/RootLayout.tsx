@@ -10,7 +10,7 @@ export function RootLayout() {
   return (
     <div className="min-h-screen">
       <header className="border-b-2 border-border-strong bg-brand-600 text-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+        <div className="mx-auto flex max-w-xl items-center justify-between px-6 py-3">
           <Link to="/" className="flex items-center gap-2 font-display text-sm">
             <PokeballMark className="h-5 w-5" tone="inverse" />
             Kanto Pokédex
@@ -37,7 +37,7 @@ export function RootLayout() {
           </nav>
         </div>
       </header>
-      <main className="mx-auto max-w-5xl px-4 py-6">
+      <main>
         <Outlet />
       </main>
     </div>
