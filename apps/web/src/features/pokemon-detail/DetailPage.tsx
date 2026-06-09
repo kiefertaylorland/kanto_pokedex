@@ -244,6 +244,7 @@ export function DetailPage() {
                 <EvoNode
                   dexNumber={branchBase.species_id}
                   name={branchBase.display_name}
+                  spriteUrl={branchBase.sprite_url}
                   isCurrent={branchBase.species_id === p.national_dex_number}
                 />
                 <EvoTrigger />
@@ -254,6 +255,7 @@ export function DetailPage() {
                       <EvoNode
                         dexNumber={node.species_id}
                         name={node.display_name}
+                        spriteUrl={node.sprite_url}
                         isCurrent={node.species_id === p.national_dex_number}
                       />
                     </div>
@@ -261,18 +263,21 @@ export function DetailPage() {
                 </div>
               </div>
             ) : (
-              <ol className="flex list-none flex-wrap items-center gap-3 p-0">
-                {chain.map((node, i) => (
-                  <li key={node.species_id} className="flex items-center gap-3">
-                    {i > 0 && <EvoTrigger label={evoLabel(node)} />}
-                    <EvoNode
-                      dexNumber={node.species_id}
-                      name={node.display_name}
-                      isCurrent={node.species_id === p.national_dex_number}
-                    />
-                  </li>
-                ))}
-              </ol>
+              <div className="-mx-1 overflow-x-auto px-1 pb-1">
+                <ol className="flex min-w-max list-none items-center gap-2 p-0 sm:gap-3">
+                  {chain.map((node, i) => (
+                    <li key={node.species_id} className="flex shrink-0 items-center gap-2 sm:gap-3">
+                      {i > 0 && <EvoTrigger label={evoLabel(node)} />}
+                      <EvoNode
+                        dexNumber={node.species_id}
+                        name={node.display_name}
+                        spriteUrl={node.sprite_url}
+                        isCurrent={node.species_id === p.national_dex_number}
+                      />
+                    </li>
+                  ))}
+                </ol>
+              </div>
             )}
           </Panel>
         </div>
