@@ -25,6 +25,7 @@ export interface PokemonAbility {
 export interface EvolutionNode {
   species_id: number;
   display_name: string;
+  sprite_url?: string | null;
   trigger: string | null;
   min_level: number | null;
   item_name: string | null;

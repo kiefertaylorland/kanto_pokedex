@@ -149,3 +149,59 @@ describe('DetailPage encounters', () => {
     expect(screen.queryByRole('link', { name: 'Pallet Town' })).not.toBeInTheDocument();
   });
 });
+
+describe('DetailPage evolution chain', () => {
+  it('renders evolution sprites in a single-row mobile scroller for linear chains', async () => {
+    vi.mocked(fetchPokemonDetail).mockResolvedValue({
+      ...PIKACHU,
+      evolution_chain: [
+        {
+          species_id: 10,
+          display_name: 'Caterpie',
+          sprite_url: 'https://cdn/sprite/10.png',
+          trigger: null,
+          min_level: null,
+          item_name: null,
+        },
+        {
+          species_id: 11,
+          display_name: 'Metapod',
+          sprite_url: 'https://cdn/sprite/11.png',
+          trigger: 'level-up',
+          min_level: 7,
+          item_name: null,
+        },
+        {
+          species_id: 12,
+          display_name: 'Butterfree',
+          sprite_url: 'https://cdn/sprite/12.png',
+          trigger: 'level-up',
+          min_level: 10,
+          item_name: null,
+        },
+      ],
+    });
+
+    const { container } = renderDetail();
+    await screen.findByRole('heading', { name: 'Pikachu' });
+
+    const evolutionList = screen.getByRole('list');
+    expect(evolutionList).toHaveClass('min-w-max');
+
+    expect(screen.getByRole('link', { name: /caterpie/i }).querySelector('img')).toHaveAttribute(
+      'src',
+      'https://cdn/sprite/10.png',
+    );
+    expect(screen.getByRole('link', { name: /metapod/i }).querySelector('img')).toHaveAttribute(
+      'src',
+      'https://cdn/sprite/11.png',
+    );
+    expect(screen.getByRole('link', { name: /butterfree/i }).querySelector('img')).toHaveAttribute(
+      'src',
+      'https://cdn/sprite/12.png',
+    );
+    expect(container.querySelector('.overflow-x-auto')).toBeInTheDocument();
+    expect(screen.getByText('Lv. 7')).toBeInTheDocument();
+    expect(screen.getByText('Lv. 10')).toBeInTheDocument();
+  });
+});
