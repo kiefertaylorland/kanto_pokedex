@@ -47,7 +47,7 @@ export function EvoNode({
         )}
       </span>
       <span className="font-display text-2xs text-ink-500">№{dex}</span>
-      <span className="min-h-8 text-[11px] font-semibold leading-tight text-ink-900 sm:text-xs">{name}</span>
+      <span className="min-h-7 text-2xs font-semibold leading-tight text-ink-900 sm:min-h-8 sm:text-xs">{name}</span>
     </Link>
   );
 }
