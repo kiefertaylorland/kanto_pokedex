@@ -19,4 +19,9 @@ describe('evaluateSyncResult (SEC-014)', () => {
     const r = evaluateSyncResult(ids);
     expect(r.ok).toBe(false);
   });
+
+  it('reports the first missing dex number when the unique count still equals 151', () => {
+    const ids = [152, ...Array.from({ length: 150 }, (_, i) => i + 1)];
+    expect(evaluateSyncResult(ids)).toEqual({ ok: false, reason: 'missing dex number 151' });
+  });
 });

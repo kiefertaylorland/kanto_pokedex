@@ -29,4 +29,12 @@ describe('TypeBadge (SEC-009)', () => {
     render(<TypeBadge type="ice" variant="outline" interactive disabled />);
     expect(screen.getByRole('button', { name: 'Ice' })).toBeDisabled();
   });
+
+  it('renders the non-interactive tint and outline variants', () => {
+    const { rerender } = render(<TypeBadge type="grass" variant="tint" />);
+    expect(screen.getByText('Grass')).toHaveStyle({ backgroundColor: 'rgb(213, 234, 214)' });
+
+    rerender(<TypeBadge type="dragon" variant="outline" />);
+    expect(screen.getByText('Dragon')).toHaveStyle({ color: 'rgb(74, 63, 181)' });
+  });
 });

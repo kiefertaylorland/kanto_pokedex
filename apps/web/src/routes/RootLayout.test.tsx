@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import {
   createRootRoute,
   createRoute,
@@ -9,14 +10,17 @@ import {
 } from '@tanstack/react-router';
 import { RootLayout } from './RootLayout';
 
+const signOut = vi.fn();
+let isAuthenticated = true;
+
 vi.mock('@/features/auth/auth', () => ({
   useAuth: () => ({
     session: null,
-    status: 'authenticated',
-    isAuthenticated: true,
+    status: isAuthenticated ? 'authenticated' : 'unauthenticated',
+    isAuthenticated,
     signInWithOAuth: vi.fn(),
     signInWithMagicLink: vi.fn(),
-    signOut: vi.fn(),
+    signOut,
   }),
 }));
 
@@ -52,6 +56,8 @@ function renderLayout(path: string) {
 
 describe('RootLayout navigation', () => {
   beforeEach(() => {
+    isAuthenticated = true;
+    signOut.mockReset();
     vi.stubGlobal('scrollTo', vi.fn());
   });
 
@@ -71,5 +77,17 @@ describe('RootLayout navigation', () => {
 
     await screen.findByRole('button', { name: 'Sign out' });
     expect(screen.getByRole('link', { name: 'Browse' })).toHaveAttribute('href', '/pokedex');
+  });
+
+  it('shows sign-in when unauthenticated and invokes sign-out when authenticated', async () => {
+    const user = userEvent.setup();
+
+    renderLayout('/pokedex');
+    await user.click(await screen.findByRole('button', { name: 'Sign out' }));
+    expect(signOut).toHaveBeenCalledOnce();
+
+    isAuthenticated = false;
+    renderLayout('/');
+    expect(await screen.findByRole('link', { name: 'Sign in' })).toHaveAttribute('href', '/auth');
   });
 });

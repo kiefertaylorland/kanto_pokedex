@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { browserQuerySchema, interpretSearch, SORT_KEYS } from './browserQuery';
+import {
+  browserQuerySchema,
+  browserSearchInput,
+  DEFAULT_BROWSER_QUERY,
+  interpretSearch,
+  resolveBrowserQuery,
+  SORT_KEYS,
+} from './browserQuery';
 
 describe('browserQuerySchema (SEC-007)', () => {
   it('applies safe defaults for an empty input', () => {
@@ -44,5 +51,15 @@ describe('interpretSearch', () => {
   });
   it('treats blank as empty', () => {
     expect(interpretSearch('   ')).toEqual({ kind: 'empty' });
+  });
+});
+
+describe('resolveBrowserQuery', () => {
+  it('fills defaults onto a sparse validated search object', () => {
+    expect(resolveBrowserQuery(browserSearchInput.parse({ q: '  Mew  ', page: '3' }))).toEqual({
+      ...DEFAULT_BROWSER_QUERY,
+      q: 'Mew',
+      page: 3,
+    });
   });
 });

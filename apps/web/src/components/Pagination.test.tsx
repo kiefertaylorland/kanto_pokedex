@@ -23,6 +23,15 @@ describe('Pagination', () => {
     render(<Pagination page={2} pageCount={5} onChange={onChange} />);
     expect(screen.getByRole('button', { name: '2' })).toHaveAttribute('aria-current', 'page');
     await userEvent.click(screen.getByRole('button', { name: '4' }));
+    await userEvent.click(screen.getByRole('button', { name: /previous page/i }));
+    await userEvent.click(screen.getByRole('button', { name: /next page/i }));
     expect(onChange).toHaveBeenCalledWith(4);
+    expect(onChange).toHaveBeenCalledWith(1);
+    expect(onChange).toHaveBeenCalledWith(3);
+  });
+
+  it('renders gap markers for long page ranges', () => {
+    render(<Pagination page={6} pageCount={20} onChange={vi.fn()} />);
+    expect(screen.getAllByText('…')).toHaveLength(2);
   });
 });

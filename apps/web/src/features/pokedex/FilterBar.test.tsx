@@ -40,4 +40,11 @@ describe('FilterBar (P2)', () => {
     // Base-stat-total reads high→low, so the toolbar applies a descending direction.
     expect(onChange).toHaveBeenCalledWith({ sort: 'base_stat_total', dir: 'desc', page: 1 });
   });
+
+  it('clears the search text back to page 1', async () => {
+    const onChange = vi.fn();
+    render(<FilterBar query={{ ...DEFAULT_BROWSER_QUERY, q: 'pika' }} onChange={onChange} />);
+    await userEvent.click(screen.getByRole('button', { name: 'Clear search' }));
+    expect(onChange).toHaveBeenCalledWith({ q: '', page: 1 });
+  });
 });
