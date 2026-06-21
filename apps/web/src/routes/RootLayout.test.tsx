@@ -82,9 +82,10 @@ describe('RootLayout navigation', () => {
   it('shows sign-in when unauthenticated and invokes sign-out when authenticated', async () => {
     const user = userEvent.setup();
 
-    renderLayout('/pokedex');
+    const first = renderLayout('/pokedex');
     await user.click(await screen.findByRole('button', { name: 'Sign out' }));
     expect(signOut).toHaveBeenCalledOnce();
+    first.unmount();
 
     isAuthenticated = false;
     renderLayout('/');
