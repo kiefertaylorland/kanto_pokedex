@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { THEME_STORAGE_KEY, toggleTheme, useThemePreference } from './useThemePreference';
 
@@ -56,5 +56,14 @@ describe('useThemePreference', () => {
     });
     expect(result.current.theme).toBe('light');
     expect(document.documentElement.dataset.theme).toBe('light');
+  });
+
+  it('falls back to light mode when storage access throws', () => {
+    const getItem = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('blocked');
+    });
+    const { result } = renderHook(() => useThemePreference());
+    expect(result.current.theme).toBe('light');
+    getItem.mockRestore();
   });
 });

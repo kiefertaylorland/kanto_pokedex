@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useSoundPreference, isSoundEnabled, toggleSound, SOUND_STORAGE_KEY } from './useSoundPreference';
 
@@ -49,5 +49,14 @@ describe('useSoundPreference', () => {
       window.dispatchEvent(new StorageEvent('storage', { key: null }));
     });
     expect(result.current.enabled).toBe(true);
+  });
+
+  it('falls back to enabled when storage access throws', () => {
+    const getItem = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('blocked');
+    });
+    const { result } = renderHook(() => useSoundPreference());
+    expect(result.current.enabled).toBe(true);
+    getItem.mockRestore();
   });
 });

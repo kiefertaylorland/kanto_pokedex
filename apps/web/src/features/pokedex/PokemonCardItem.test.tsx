@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
 import type { PokemonCard } from '@kanto/shared';
 import { PokemonCardItem } from './PokemonCardItem';
@@ -12,8 +13,10 @@ vi.mock('@tanstack/react-router', () => ({
   ),
 }));
 
+const toggle = vi.fn();
+
 vi.mock('@/features/favorites/useFavorites', () => ({
-  useFavorites: () => ({ isFavorite: () => false, toggle: vi.fn() }),
+  useFavorites: () => ({ isFavorite: () => false, toggle }),
 }));
 
 const basePokemon: PokemonCard = {
@@ -38,5 +41,14 @@ describe('PokemonCardItem', () => {
     const singleTypeContainer = container.querySelector('div.min-h-14');
     expect(singleTypeContainer).not.toBeNull();
     expect(singleTypeContainer!).toHaveClass('min-h-14', 'items-start', 'content-start');
+  });
+
+  it('shows a no-image fallback and toggles the favorite star', async () => {
+    const user = userEvent.setup();
+    render(<PokemonCardItem pokemon={{ ...basePokemon, sprite_url: null }} />);
+
+    expect(screen.getByText('No image')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /add charizard to favorites/i }));
+    expect(toggle).toHaveBeenCalledWith(6);
   });
 });
